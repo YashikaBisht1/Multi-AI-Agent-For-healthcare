@@ -1,0 +1,8 @@
+ollama
+streamlit
+pandas
+loguru
+python-dotenv
+wordcloud
+seaborn
+matplotlib
