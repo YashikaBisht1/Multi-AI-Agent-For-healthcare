@@ -2,7 +2,7 @@ import streamlit as st
 
 import matplotlib.pyplot as plt
 
-from wordcloud import WordCloud
+from wordcloud import WordCloud, STOPWORDS
 from agents import AgentManager
 from utils.logger import logger
 from dotenv import load_dotenv
@@ -68,7 +68,7 @@ def main():
         border: none;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         transition: all 0.3s ease;
-    }
+    } 
     .stButton>button:hover {
         background-color: #1565C0;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -269,7 +269,9 @@ def summarize_section(agent_manager):
 
 
 def show_wordcloud(text):
-    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+    stopwords = set(STOPWORDS)
+    wordcloud = WordCloud(width=800, height=400, max_words=25, background_color='white', colormap='Set2',
+                      collocations=False, stopwords=STOPWORDS).generate(text)
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")

@@ -14,18 +14,18 @@
   - [Validator Agents](#validator-agents)
 - [Logging](#logging)
 - [Contributing](#contributing)
-- [License](#license)
 - [Acknowledgements](#acknowledgements)
 
 ## Overview
 
-The **Multi-Agent AI App with Ollama** is a Python-based application leveraging the open-source LLaMA 3.2:3b model via Ollama to perform specialized tasks through a collaborative multi-agent architecture. Built with Streamlit for an intuitive web interface, this system includes agents for summarizing medical texts, writing research articles, and sanitizing medical data (Protected Health Information - PHI). Each primary agent is paired with a corresponding validator agent to ensure the quality and accuracy of the outputs.
+The **Multi-Agent AI App with Ollama** is a Python-based application leveraging the open-source LLaMA 3.2:3b model via Ollama to perform specialized tasks through a collaborative multi-agent architecture. Built with Streamlit for an intuitive web interface, this system includes agents for summarizing medical texts, writing research articles, sanitizing medical data (Protected Health Information - PHI) and answering medical queries. Each primary agent is paired with a corresponding validator agent to ensure the quality and accuracy of the outputs.
 
 ## Features
 
 - **Summarize Medical Texts:** Generate concise summaries of lengthy medical documents.
 - **Write and Refine Research Articles:** Create detailed research articles based on a given topic and optional outline, followed by refinement for enhanced quality.
 - **Sanitize Medical Data (PHI):** Remove sensitive health information from medical datasets to ensure privacy compliance.
+- **AI Medical Assistant:** Answers your medical queries.
 - **Quality Validation:** Each primary task is accompanied by a validator agent to assess and ensure output quality.
 - **Robust Logging:** Comprehensive logging for monitoring and debugging purposes.
 - **User-Friendly Interface:** Streamlit-based web app for easy interaction and task management.
@@ -91,6 +91,7 @@ The **Multi-Agent AI App with Ollama** is a Python-based application leveraging 
    - **Summarize Agent:** Generates summaries of medical texts.
    - **Write Article Agent:** Creates drafts of research articles.
    - **Sanitize Data Agent:** Removes PHI from medical data.
+   - **AI Chatbot Agent:** Answers medical queries.
 
 5. **Validator Agents**
    - **Summarize Validator Agent:** Assesses the quality of summaries.
@@ -114,8 +115,8 @@ The **Multi-Agent AI App with Ollama** is a Python-based application leveraging 
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/AIAnytime/AI-Agents-from-Scratch-using-Ollama
-   cd AI-Agents-from-Scratch-using-Ollama
+   git clone https://github.com/YashikaBisht1/Multi-AI-Agent-For-healthcare/
+   cd Multi-AI-Agents-for-Healthcare-using-Ollama
    ```
 
 2. **Create a Virtual Environment**
@@ -163,6 +164,7 @@ The **Multi-Agent AI App with Ollama** is a Python-based application leveraging 
    - **Summarize Medical Text:** Input medical texts to receive concise summaries.
    - **Write and Refine Research Article:** Provide a topic and optional outline to generate and refine research articles.
    - **Sanitize Medical Data (PHI):** Input medical data to remove sensitive information.
+   - **AI Medical Assistant:** Answer medical queries.
 
 ## Agents
 
@@ -179,6 +181,10 @@ The **Multi-Agent AI App with Ollama** is a Python-based application leveraging 
 - **Sanitize Data Agent**
   - **Function:** Removes Protected Health Information (PHI) from medical data.
   - **Usage:** Input medical data containing PHI to receive sanitized data.
+  
+- **AI Chatbot Agent**
+  - **Function:** 
+  - **Usage:** 
 
 ### Validator Agents
 
@@ -225,10 +231,6 @@ Contributions are welcome! Please follow these steps:
    ```
 
 5. **Open a Pull Request**
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgements
 

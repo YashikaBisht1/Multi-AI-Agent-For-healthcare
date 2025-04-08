@@ -6,3 +6,5 @@ python-dotenv
 wordcloud
 seaborn
 matplotlib
+langchain
+langchain-community

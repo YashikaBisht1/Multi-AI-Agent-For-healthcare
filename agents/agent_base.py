@@ -1,13 +1,24 @@
+
+
 # agents/agent_base.py
 
 import ollama
 from abc import ABC, abstractmethod
 from loguru import logger
-import os
 
 class AgentBase(ABC):
-    def __init__(self, name, max_retries=2, verbose=True):
+    def __init__(self, name, model='llama3.2:3b', max_retries=2, verbose=True):
+        """
+        Base class for all agents.
+
+        Args:
+            name (str): Agent name (used for logging).
+            model (str): Name of the Ollama model to use.
+            max_retries (int): Number of retry attempts for API calls.
+            verbose (bool): Whether to enable verbose logging.
+        """
         self.name = name
+        self.model = model
         self.max_retries = max_retries
         self.verbose = verbose
 
@@ -15,40 +26,45 @@ class AgentBase(ABC):
     def execute(self, *args, **kwargs):
         pass
 
-    def call_llama(self, messages, temperature=0.7, max_tokens=150):
+    def call_llama(self, messages, temperature=0.7,):
         """
         Calls the Llama model via Ollama and retrieves the response.
 
         Args:
-            messages (list): A list of message dictionaries.
+            messages (list): A list of message dictionaries with 'role' and 'content'.
             temperature (float): Sampling temperature.
-            max_tokens (int): Maximum number of tokens in the response.
 
         Returns:
-            str: The content of the model's response.
+            str: The model's response content.
         """
         retries = 0
         while retries < self.max_retries:
             try:
                 if self.verbose:
-                    logger.info(f"[{self.name}] Sending messages to Ollama:")
+                    logger.info(f"[{self.name}] Sending messages to Ollama ({self.model}):")
                     for msg in messages:
                         logger.debug(f"  {msg['role']}: {msg['content']}")
-                
-                # Call the Ollama chat API
+
+                # Call Ollama's chat API
                 response = ollama.chat(
-                    model='llama3.2:3b',  # Updated model name
-                    messages=messages
+                    model=self.model,
+                    messages=messages,
+                    options={"temperature": temperature}
                 )
-                
-                # Parse the response to extract the text content
-                reply = response['message']['content']
-                
+
+                # Extract and return the response content
+                reply = response.get("message", {}).get("content", "").strip()
+
+                if not reply:
+                    raise ValueError("Received empty response from Ollama.")
+
                 if self.verbose:
-                    logger.info(f"[{self.name}] Received response: {reply}")
-                
+                    logger.info(f"[{self.name}] Response: {reply}")
+
                 return reply
+
             except Exception as e:
                 retries += 1
-                logger.error(f"[{self.name}] Error during Ollama call: {e}. Retry {retries}/{self.max_retries}")
-        raise Exception(f"[{self.name}] Failed to get response from Ollama after {self.max_retries} retries.")
+                logger.error(f"[{self.name}] Ollama error: {e} (Retry {retries}/{self.max_retries})")
+
+        raise RuntimeError(f"[{self.name}] Failed to get response from Ollama after {self.max_retries} retries.")

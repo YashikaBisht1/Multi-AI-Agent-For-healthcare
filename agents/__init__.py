@@ -8,6 +8,8 @@ from .write_article_validator_agent import WriteArticleValidatorAgent
 from .sanitize_data_validator_agent import SanitizeDataValidatorAgent
 from .refiner_agent import RefinerAgent # New import
 from .validator_agent import ValidatorAgent  # New import
+from .chatbot_agent import ChatbotAgent
+
 
 class AgentManager:
     def __init__(self, max_retries=2, verbose=True):
@@ -19,7 +21,9 @@ class AgentManager:
             "write_article_validator": WriteArticleValidatorAgent(max_retries=max_retries, verbose=verbose),
             "sanitize_data_validator": SanitizeDataValidatorAgent(max_retries=max_retries, verbose=verbose),
             "refiner": RefinerAgent(max_retries=max_retries, verbose=verbose),      # New agent
-            "validator": ValidatorAgent(max_retries=max_retries, verbose=verbose)   # New agent
+            "validator": ValidatorAgent(max_retries=max_retries, verbose=verbose) , # New agent
+            "chatbot": ChatbotAgent(max_retries=max_retries, verbose=verbose)       # New agent
+
         }
 
     def get_agent(self, agent_name):
