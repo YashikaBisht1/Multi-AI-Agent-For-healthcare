@@ -31,10 +31,12 @@ class SummarizeValidatorAgent(AgentBase):
         ai_rating = self.extract_validation_score(validation_response)
         human_rating = self.get_human_feedback(validation_response)
 
+        average_score = (ai_rating + human_rating) / 2
+
         self.store_feedback(original_text, summary, ai_rating, human_rating)
         self.optimize_with_rl()
 
-        return validation_response
+        return validation_response, average_score
 
     def extract_validation_score(self, response):
         """

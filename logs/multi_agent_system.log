@@ -829,7 +829,6 @@ The summary is well-written and effectively conveys the main points of the origi
 
 **What is Anemia?**
 
-Anemia is a disorder characterized by a decrease in the number of red blood cells (RBCs) or the amount of hemoglobin in the blood. Hemoglobin is a protein in RBCs that carries oxygen from the lungs to the body's tissues.
 
 **Causes of Anemia:**
 
@@ -879,3 +878,413 @@ To prevent anemia, it's essential to:
 3. **Avoid heavy bleeding**: Manage heavy menstrual periods or gastrointestinal bleeding by practicing good hygiene and using protective measures.
 
 I hope this helps you understand anemia better! Do you have any specific questions about anemia?
+2025-04-09T20:49:35.753755+0530 INFO [ChatbotAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-09T20:49:35.765889+0530 DEBUG   system: You are a helpful and knowledgeable AI assistant specialized in medical research and healthcare.
+2025-04-09T20:49:35.767025+0530 DEBUG   user: Hello tell me about anemia
+2025-04-09T20:50:33.575869+0530 INFO [ChatbotAgent] Response: Anemia is a fascinating topic, and I'd be happy to provide you with information.
+
+**What is Anemia?**
+
+Anemia is a medical condition characterized by a decrease in the number of red blood cells (RBCs) or the amount of hemoglobin in the blood. Hemoglobin is a protein in RBCs that carries oxygen to different parts of the body, including muscles and organs.
+
+**Types of Anemia:**
+
+There are several types of anemia, including:
+
+1. **Iron-deficiency anemia**: This is the most common type of anemia, caused by a lack of iron in the diet or excessive blood loss.
+2. **Vitamin deficiency anemia**: Deficiencies in vitamins like B12 and folate can lead to anemia.
+3. **Anisocytosis**: A condition characterized by an uneven distribution of RBCs in the blood.
+4. **Sideroblastic anemia**: A rare genetic disorder that affects the production of hemoglobin.
+5. **Hemolytic anemia**: A condition where red blood cells are destroyed faster than they can be made.
+
+**Causes and Risk Factors:**
+
+Some common causes and risk factors for anemia include:
+
+1. **Poor diet**: Lack of iron, vitamin B12, or folate in the diet.
+2. **Chronic disease**: Conditions like kidney disease, rheumatoid arthritis, and cancer can lead to anemia.
+3. **Blood loss**: Heavy menstrual bleeding, internal bleeding, or surgery can cause anemia.
+4. **Medications**: Certain medications, such as those used to treat ulcers and cancer, can interfere with iron absorption.
+5. **Pregnancy**: Pregnant women are at risk of developing anemia due to increased blood volume and nutritional needs.
+
+**Symptoms:**
+
+The symptoms of anemia may vary depending on the severity of the condition, but common signs include:
+
+1. **Fatigue**: Feeling tired or weak.
+2. **Shortness of breath**: Difficulty breathing.
+3. **Dizziness**: Lightheadedness or feeling faint.
+4. **Pale skin**: Skin may appear pale or washed out.
+5. **Cold hands and feet**: Poor circulation can cause cold extremities.
+
+**Treatment and Management:**
+
+The treatment for anemia depends on the underlying cause, but common approaches include:
+
+1. **Iron supplements**: Iron-rich foods or iron supplements to replenish stores.
+2. **Vitamin supplements**: Vitamin B12 and folate supplements may be prescribed.
+3. **Blood transfusions**: In severe cases, blood transfusions may be necessary.
+4. **Dietary changes**: Increasing iron and vitamin intake through diet and supplements.
+
+**Prevention:**
+
+To prevent anemia:
+
+1. **Eat a balanced diet**: Include iron-rich foods like red meat, spinach, and beans in your diet.
+2. **Stay hydrated**: Drink plenty of water to help your body absorb nutrients.
+3. **Get regular check-ups**: Regular health check-ups can help detect any underlying conditions that may lead to anemia.
+
+I hope this information helps! Do you have any specific questions about anemia?
+2025-04-11T12:59:19.635693+0530 ERROR SummarizeAgent Error: AgentBase.call_llama() got an unexpected keyword argument 'max_tokens'
+2025-04-11T13:02:55.095127+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-04-11T13:02:55.096221+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-04-11T13:02:55.096221+0530 DEBUG   user: Summarize the following medical text concisely:
+
+Patient ID: P123456
+Name: Mr. Rajesh Kumar
+Age: 52
+Gender: Male
+Date of Visit: 2025-04-10
+Chief Complaints:
+
+Increased thirst
+
+Frequent urination
+
+Fatigue
+
+Blurred vision
+
+Medical History:
+
+Diagnosed with Type 2 Diabetes Mellitus 3 years ago
+
+Family history of diabetes (mother)
+
+Hypertension (diagnosed 5 years ago)
+
+Lifestyle:
+
+Sedentary lifestyle
+
+Irregular diet
+
+Occasional smoking
+
+Vitals:
+
+Blood Pressure: 145/90 mmHg
+
+Heart Rate: 82 bpm
+
+BMI: 29.1 (Overweight)
+
+Temperature: 98.7°F
+
+Lab Results:
+
+Fasting Blood Sugar: 160 mg/dL (Normal: <100)
+
+Postprandial Blood Sugar: 230 mg/dL (Normal: <140)
+
+HbA1c: 8.1% (Normal: <5.7%)
+
+Cholesterol: 220 mg/dL
+
+LDL: 140 mg/dL
+
+HDL: 38 mg/dL
+
+Diagnosis:
+
+Type 2 Diabetes Mellitus (poorly controlled)
+
+Hypertension
+
+Prescribed Medications:
+
+Metformin 500 mg, twice daily
+
+Glimepiride 2 mg, once daily before breakfast
+
+Telmisartan 40 mg, once daily
+
+Doctor's Notes:
+
+Emphasized need for lifestyle changes (daily walking, controlled diet)
+
+Referred to a dietician for personalized diabetic diet plan
+
+Follow-up in 4 weeks with updated blood sugar profile
+
+Summary:
+2025-04-11T13:03:32.126162+0530 INFO [SummarizeTool] Response: Here is a concise summary of the medical text:
+
+**Patient Profile:** Mr. Rajesh Kumar, 52-year-old male with Type 2 Diabetes Mellitus and hypertension.
+
+**Chief Complaints:** Increased thirst, frequent urination, fatigue, and blurred vision.
+
+**Medical History:** Diagnosed with Type 2 Diabetes Mellitus 3 years ago, family history of diabetes, and hypertension diagnosed 5 years ago.
+
+**Lab Results:**
+
+* Fasting Blood Sugar: 160 mg/dL (elevated)
+* Postprandial Blood Sugar: 230 mg/dL (elevated)
+* HbA1c: 8.1% (above target range)
+
+**Diagnosis:** Type 2 Diabetes Mellitus with poorly controlled blood sugar levels.
+
+**Prescribed Medications:**
+
+* Metformin (twice daily)
+* Glimepiride (once daily before breakfast)
+* Telmisartan (once daily)
+
+**Recommendations:** Emphasized need for lifestyle changes, referred to a dietician for personalized diabetic diet plan, and scheduled follow-up in 4 weeks.
+2025-04-11T13:03:33.270399+0530 INFO [SummarizeValidatorAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-11T13:03:33.319142+0530 DEBUG   system: You are an AI assistant that validates summaries of medical texts.
+2025-04-11T13:03:33.322318+0530 DEBUG   user: Given the original text and its summary, assess whether the summary accurately and concisely captures the key points.
+Provide a brief analysis and rate the summary on a scale of 1 to 5, where 5 indicates excellent quality.
+
+Original Text:
+Patient ID: P123456
+Name: Mr. Rajesh Kumar
+Age: 52
+Gender: Male
+Date of Visit: 2025-04-10
+Chief Complaints:
+
+Increased thirst
+
+Frequent urination
+
+Fatigue
+
+Blurred vision
+
+Medical History:
+
+Diagnosed with Type 2 Diabetes Mellitus 3 years ago
+
+Family history of diabetes (mother)
+
+Hypertension (diagnosed 5 years ago)
+
+Lifestyle:
+
+Sedentary lifestyle
+
+Irregular diet
+
+Occasional smoking
+
+Vitals:
+
+Blood Pressure: 145/90 mmHg
+
+Heart Rate: 82 bpm
+
+BMI: 29.1 (Overweight)
+
+Temperature: 98.7°F
+
+Lab Results:
+
+Fasting Blood Sugar: 160 mg/dL (Normal: <100)
+
+Postprandial Blood Sugar: 230 mg/dL (Normal: <140)
+
+HbA1c: 8.1% (Normal: <5.7%)
+
+Cholesterol: 220 mg/dL
+
+LDL: 140 mg/dL
+
+HDL: 38 mg/dL
+
+Diagnosis:
+
+Type 2 Diabetes Mellitus (poorly controlled)
+
+Hypertension
+
+Prescribed Medications:
+
+Metformin 500 mg, twice daily
+
+Glimepiride 2 mg, once daily before breakfast
+
+Telmisartan 40 mg, once daily
+
+Doctor's Notes:
+
+Emphasized need for lifestyle changes (daily walking, controlled diet)
+
+Referred to a dietician for personalized diabetic diet plan
+
+Follow-up in 4 weeks with updated blood sugar profile
+
+Summary:
+Here is a concise summary of the medical text:
+
+**Patient Profile:** Mr. Rajesh Kumar, 52-year-old male with Type 2 Diabetes Mellitus and hypertension.
+
+**Chief Complaints:** Increased thirst, frequent urination, fatigue, and blurred vision.
+
+**Medical History:** Diagnosed with Type 2 Diabetes Mellitus 3 years ago, family history of diabetes, and hypertension diagnosed 5 years ago.
+
+**Lab Results:**
+
+* Fasting Blood Sugar: 160 mg/dL (elevated)
+* Postprandial Blood Sugar: 230 mg/dL (elevated)
+* HbA1c: 8.1% (above target range)
+
+**Diagnosis:** Type 2 Diabetes Mellitus with poorly controlled blood sugar levels.
+
+**Prescribed Medications:**
+
+* Metformin (twice daily)
+* Glimepiride (once daily before breakfast)
+* Telmisartan (once daily)
+
+**Recommendations:** Emphasized need for lifestyle changes, referred to a dietician for personalized diabetic diet plan, and scheduled follow-up in 4 weeks.
+
+Validation Report:
+2025-04-11T13:04:23.646770+0530 INFO [SummarizeValidatorAgent] Response: Based on the original text and its summary, I assess that the summary accurately captures the key points. However, it could be improved with a few additional details and clarifications.
+
+**Summary Strengths:**
+
+1. **Patient Profile**: The summary provides a concise overview of the patient's demographic information.
+2. **Chief Complaints and Medical History**: It effectively summarizes the patient's chief complaints and medical history, including their diagnoses and family history.
+3. **Lab Results and Diagnosis**: The summary accurately reports the lab results and diagnosis.
+
+**Summary Weaknesses:**
+
+1. **Lack of detail in Lifestyle Section**: The summary only mentions the need for lifestyle changes but doesn't provide any specific details about the recommended changes (e.g., daily walking, controlled diet).
+2. **Missing Vitals Details**: While the summary reports some vital signs, it omits others, such as blood pressure and BMI.
+3. **Limited Context for Medications**: The summary briefly mentions the prescribed medications but doesn't provide any information on their dosages or frequency.
+
+**Rating: 4/5**
+
+The summary provides a solid foundation for understanding the patient's profile, chief complaints, medical history, lab results, diagnosis, and treatment plan. However, with some additional details and clarifications, it could be even more comprehensive and informative.
+
+To improve the summary, consider adding:
+
+* More specific details about lifestyle changes (e.g., daily walking, controlled diet)
+* Additional vital signs (e.g., blood pressure, BMI)
+* Information on medication dosages or frequency
+* Any other relevant information from the doctor's notes
+
+With these additions, the summary would be even more accurate and informative, providing a better understanding of the patient's condition and treatment plan.
+2025-04-11T13:41:29.022864+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-04-11T13:41:29.024097+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-04-11T13:41:29.024097+0530 DEBUG   user: Summarize the following medical text concisely:
+
+A 58-year-old male was admitted with sudden right-sided weakness and slurred speech due to an acute ischemic stroke in the left middle cerebral artery territory. He received intravenous thrombolysis within 2 hours, showing partial improvement. After hospitalization, he demonstrated improved speech and motor function but mild persistent weakness. Upon discharge, he was advised to continue medication, maintain a low-sodium diet, and follow up with neurology and physical therapy to prevent recurrence.
+
+Summary:
+2025-04-11T13:41:45.359412+0530 INFO [SummarizeTool] Response: Here is a concise summary of the medical text:
+
+A 58-year-old male had an acute ischemic stroke in the left middle cerebral artery territory. He received thrombolysis within 2 hours and partially improved, but retained mild weakness after discharge. Follow-up care includes medication, low-sodium diet, neurology follow-ups, and physical therapy to prevent recurrence.
+2025-04-11T13:41:46.518756+0530 INFO [SummarizeValidatorAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-11T13:41:46.523287+0530 DEBUG   system: You are an AI assistant that validates summaries of medical texts.
+2025-04-11T13:41:46.523287+0530 DEBUG   user: Given the original text and its summary, assess whether the summary accurately and concisely captures the key points.
+Provide a brief analysis and rate the summary on a scale of 1 to 5, where 5 indicates excellent quality.
+
+Original Text:
+A 58-year-old male was admitted with sudden right-sided weakness and slurred speech due to an acute ischemic stroke in the left middle cerebral artery territory. He received intravenous thrombolysis within 2 hours, showing partial improvement. After hospitalization, he demonstrated improved speech and motor function but mild persistent weakness. Upon discharge, he was advised to continue medication, maintain a low-sodium diet, and follow up with neurology and physical therapy to prevent recurrence.
+
+Summary:
+Here is a concise summary of the medical text:
+
+A 58-year-old male had an acute ischemic stroke in the left middle cerebral artery territory. He received thrombolysis within 2 hours and partially improved, but retained mild weakness after discharge. Follow-up care includes medication, low-sodium diet, neurology follow-ups, and physical therapy to prevent recurrence.
+
+Validation Report:
+2025-04-11T13:42:17.855621+0530 INFO [SummarizeValidatorAgent] Response: **Summary Accuracy and Conciseness:** 4/5
+
+The summary accurately captures the key points of the original text:
+
+1. The patient had an acute ischemic stroke in the left middle cerebral artery territory.
+2. He received thrombolysis within 2 hours, showing partial improvement.
+3. Despite partial improvement, he retained mild weakness after discharge.
+
+However, the summary could be improved by adding more detail and nuance to convey the complexity of the case. For example:
+
+* The patient's symptoms were not limited to "sudden right-sided weakness and slurred speech," but rather a comprehensive assessment would include other symptoms such as visual disturbances, dysphagia, or cognitive impairment.
+* The summary mentions that the patient partially improved after thrombolysis, but does not specify what percentage of improvement was achieved or whether any residual deficits remained.
+* The follow-up care listed in the summary is concise and accurate, but a more detailed explanation of the treatment plan would provide additional context.
+
+**Suggested Improvements:**
+
+1. Add more specific details about the patient's symptoms and presentation.
+2. Clarify the extent of improvement achieved after thrombolysis.
+3. Consider adding more context to the follow-up care listed in the summary, such as the medications prescribed or specific rehabilitation interventions planned.
+
+By incorporating these suggestions, the summary could be even more accurate, concise, and informative for readers.
+2025-04-11T13:49:46.654782+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-04-11T13:49:46.656877+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-04-11T13:49:46.656877+0530 DEBUG   user: Summarize the following medical text concisely:
+
+A 58-year-old male was admitted with sudden right-sided weakness and slurred speech due to an acute ischemic stroke in the left middle cerebral artery territory. He received intravenous thrombolysis within 2 hours, showing partial improvement. After hospitalization, he demonstrated improved speech and motor function but mild persistent weakness. Upon discharge, he was advised to continue medication, maintain a low-sodium diet, and follow up with neurology and physical therapy to prevent recurrence.
+
+
+Summary:
+2025-04-11T13:50:01.815163+0530 INFO [SummarizeTool] Response: A 58-year-old male had an acute ischemic stroke in the left middle cerebral artery territory, presenting with sudden right-sided weakness and slurred speech. He received intravenous thrombolysis within 2 hours, showed partial improvement, and was discharged with mild persistent weakness, advised to continue medication, follow a low-sodium diet, and receive regular follow-up care.
+2025-04-11T13:50:02.705797+0530 INFO [SummarizeValidatorAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-11T13:50:02.720527+0530 DEBUG   system: You are an AI assistant that validates summaries of medical texts.
+2025-04-11T13:50:02.720527+0530 DEBUG   user: Given the original text and its summary, assess whether the summary accurately and concisely captures the key points.
+Provide a brief analysis and rate the summary on a scale of 1 to 5, where 5 indicates excellent quality.
+
+Original Text:
+A 58-year-old male was admitted with sudden right-sided weakness and slurred speech due to an acute ischemic stroke in the left middle cerebral artery territory. He received intravenous thrombolysis within 2 hours, showing partial improvement. After hospitalization, he demonstrated improved speech and motor function but mild persistent weakness. Upon discharge, he was advised to continue medication, maintain a low-sodium diet, and follow up with neurology and physical therapy to prevent recurrence.
+
+
+Summary:
+A 58-year-old male had an acute ischemic stroke in the left middle cerebral artery territory, presenting with sudden right-sided weakness and slurred speech. He received intravenous thrombolysis within 2 hours, showed partial improvement, and was discharged with mild persistent weakness, advised to continue medication, follow a low-sodium diet, and receive regular follow-up care.
+
+Validation Report:
+2025-04-11T13:50:29.047844+0530 INFO [SummarizeValidatorAgent] Response: **Summary Quality Assessment**
+
+I have evaluated the summary against the original text. The summary accurately captures the key points of the case study:
+
+* The patient is a 58-year-old male who experienced an acute ischemic stroke in the left middle cerebral artery territory.
+* He presented with sudden right-sided weakness and slurred speech.
+* He received intravenous thrombolysis within 2 hours, which led to partial improvement.
+* Despite initial improvement, he showed mild persistent weakness upon discharge.
+
+However, I would suggest a few minor adjustments to improve the summary's quality:
+
+* Consider adding more context about the patient's condition, such as the duration of hospitalization or any notable complications.
+* The phrase "showed partial improvement" could be rephrased for greater clarity (e.g., "experienced significant improvement").
+* The final sentence is concise but feels a bit abrupt. Consider adding more detail about what follows-up care entails.
+
+**Rating: 4/5**
+
+The summary effectively conveys the main points of the case study, and its brevity makes it easy to read and understand. With some minor revisions, the summary can be even more comprehensive and engaging.
+2025-04-11T13:57:21.126689+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-04-11T13:57:21.127392+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-04-11T13:57:21.129545+0530 DEBUG   user: Summarize the following medical text concisely:
+
+Anemia is a disorder characterized by a decrease in the number of red blood cells (RBCs) or the amount of hemoglobin in the blood. Hemoglobin is a protein in RBCs that carries oxygen from the lungs to the body's tissues.
+
+
+Summary:
+2025-04-11T13:57:31.489490+0530 INFO [SummarizeTool] Response: Anemia occurs when there is a decrease in either the number of red blood cells (RBCs) or their hemoglobin content, leading to inadequate oxygen delivery to the body's tissues.
+2025-04-11T13:57:31.947998+0530 INFO [SummarizeValidatorAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-11T13:57:31.950007+0530 DEBUG   system: You are an AI assistant that validates summaries of medical texts.
+2025-04-11T13:57:31.950007+0530 DEBUG   user: Given the original text and its summary, assess whether the summary accurately and concisely captures the key points.
+Provide a brief analysis and rate the summary on a scale of 1 to 5, where 5 indicates excellent quality.
+
+Original Text:
+Anemia is a disorder characterized by a decrease in the number of red blood cells (RBCs) or the amount of hemoglobin in the blood. Hemoglobin is a protein in RBCs that carries oxygen from the lungs to the body's tissues.
+
+
+Summary:
+Anemia occurs when there is a decrease in either the number of red blood cells (RBCs) or their hemoglobin content, leading to inadequate oxygen delivery to the body's tissues.
+
+Validation Report:
+2025-04-11T13:57:46.774478+0530 INFO [SummarizeValidatorAgent] Response: **Analysis:** The summary accurately captures the key points of the original text. It clearly states that anemia involves a decrease in either RBCs or hemoglobin, and conveys the consequence of this decrease, which is inadequate oxygen delivery to the body's tissues.
+
+**Rating: 5**
+
+The summary is concise, clear, and comprehensive, providing a good understanding of the disorder without omitting essential information. The language used is straightforward, making it accessible to a general audience or those without a medical background. Overall, the summary effectively conveys the main ideas of the original text.

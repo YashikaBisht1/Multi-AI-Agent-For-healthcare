@@ -26,7 +26,7 @@ class AgentBase(ABC):
     def execute(self, *args, **kwargs):
         pass
 
-    def call_llama(self, messages, temperature=0.7,):
+    def call_llama(self, messages, temperature=0.7,max_tokens=512):
         """
         Calls the Llama model via Ollama and retrieves the response.
 

@@ -195,10 +195,13 @@ def chatbot_section(agent_manager):
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
 
+    # Toggle model selection
+    use_biogpt = st.radio("🤖 Choose AI Model:", ["BioGPT", "LLaMA/Ollama"], horizontal=True) == "BioGPT"
+
     user_input = st.text_input("💡 Ask me anything about medical research or AI:")
 
     if st.button("💬 Chat") and user_input:
-        chatbot_agent = agent_manager.get_agent("chatbot")
+        chatbot_agent = agent_manager.get_agent("chatbot", use_biogpt=use_biogpt)
 
         with st.spinner("🤖 Thinking..."):
             try:
@@ -212,19 +215,11 @@ def chatbot_section(agent_manager):
     for role, message in st.session_state.chat_history:
         st.markdown(f"**{role}:** {message}")
 
-    # Clear chat history button
     if st.button("🗑 Clear Chat History"):
         st.session_state.chat_history = []
 
 
-def download_results(processed_text, validation_report, filename="results.txt"):
-    """Generate a downloadable link for processed text and validation report."""
-    combined_content = f"=== Processed Text ===\n{processed_text}\n\n=== Validation Report ===\n{validation_report}"
 
-    b64 = base64.b64encode(combined_content.encode()).decode()  # Encode the text file
-    href = f'<a href="data:file/txt;base64,{b64}" download="{filename}">📥 Click here to download results</a>'
-
-    st.markdown(href, unsafe_allow_html=True)
 
 
 def summarize_section(agent_manager):
@@ -243,29 +238,113 @@ def summarize_section(agent_manager):
             try:
                 summary = main_agent.execute(text)
                 st.session_state["summary"] = summary
-                st.markdown(f"<div class='result-box'><strong>✅ Summary:</strong><br>{summary}</div>",
-                            unsafe_allow_html=True)
+                st.markdown(f"<div class='result-box'><strong>✅ Summary:</strong><br>{summary}</div>", unsafe_allow_html=True)
                 show_wordcloud(text)
             except Exception as e:
-                st.error(f"⚠️ Error: {e}")
+                st.error(f"⚠️ Error during summarization: {e}")
                 logger.error(f"SummarizeAgent Error: {e}")
                 return
 
         with st.spinner("🔄 Validating summary..."):
             try:
-                validation = validator_agent.execute(original_text=text, summary=summary)
+                validation, ai_score = validator_agent.execute(original_text=text, summary=summary)
                 st.session_state["validation"] = validation
-                st.markdown(f"<div class='validation-box'><strong>🔍 Validation:</strong><br>{validation}</div>",
-                            unsafe_allow_html=True)
+                st.markdown(f"<div class='validation-box'><strong>🔍 Validation Report:</strong><br>{validation}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='rating-box'><strong>🤖 AI Rating:</strong> {ai_score:.1f} / 5</div>", unsafe_allow_html=True)
+
+                # Human input
+                human_score = st.number_input("🧠 Your Rating (1.0 to 5.0):", min_value=1.0, max_value=5.0, step=0.1, key="rating_input")
+                final_summary = summary
+
+                if human_score:
+                    avg_score = round((ai_score + human_score) / 2, 1)
+                    st.session_state["validation_rating"] = human_score
+                    st.markdown(f"<div class='rating-box'><strong>📊 Average Rating:</strong> {avg_score} / 5</div>", unsafe_allow_html=True)
+
+                    # Improve if needed
+                    if avg_score < 3.5:
+                        with st.spinner("🔁 Improving summary..."):
+                            try:
+                                improved_prompt = (
+                                    f"Improve the following summary based on the original text. "
+                                    f"Ensure it's more concise, accurate, and medically appropriate.\n\n"
+                                    f"Original Text:\n{text}\n\nSummary:\n{summary}"
+                                )
+                                improved_summary = validator_agent.call_llama([
+                                    {"role": "system", "content": "You are a medical summarization improver."},
+                                    {"role": "user", "content": improved_prompt}
+                                ])
+                                final_summary = improved_summary
+                                st.markdown(f"<div class='result-box'><strong>🔁 Improved Summary:</strong><br>{improved_summary}</div>", unsafe_allow_html=True)
+                            except Exception as e:
+                                st.warning(f"⚠️ Couldn't improve summary: {e}")
+
+                # Download report
+                download_summary_report(
+                    original_text=text,
+                    summary=final_summary,
+                    validation_report=validation,
+                    ai_rating=ai_score,
+                    human_rating=human_score
+                )
+
+
             except Exception as e:
                 st.error(f"⚠️ Validation Error: {e}")
                 logger.error(f"SummarizeValidatorAgent Error: {e}")
-                return
 
-        rating = st.slider("🌟 Rate the Validation (1-5 stars):", 1, 5, key="rating")
-        st.session_state["validation_rating"] = rating
-        st.markdown(f"<div class='rating-box'><strong>⭐ Your Rating:</strong> {rating} stars</div>",
-                    unsafe_allow_html=True)
+from io import BytesIO
+from datetime import datetime
+
+def download_summary_report(original_text, summary, validation_report, ai_rating, human_rating):
+    """
+    Creates and enables downloading of a summary validation report.
+    Includes original text, final summary, validation notes, and ratings.
+    """
+    avg_rating = round((ai_rating + human_rating) / 2, 1)
+
+    report = f"""🧾 MEDICAL SUMMARY REPORT
+Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+{"="*60}
+
+📄 ORIGINAL TEXT:
+{original_text.strip()}
+
+{"="*60}
+📝 FINAL SUMMARY:
+{summary.strip()}
+
+{"="*60}
+🔍 VALIDATION REPORT:
+{validation_report.strip()}
+
+{"="*60}
+📊 RATINGS:
+🤖 AI Rating     : {ai_rating} / 5
+🧠 Human Rating  : {human_rating} / 5
+📈 Average Rating: {avg_rating} / 5
+"""
+
+    buffer = BytesIO()
+    buffer.write(report.encode())
+    buffer.seek(0)
+
+    filename = f"summary_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    st.download_button(
+        label="⬇️ Download Summary Report",
+        data=buffer,
+        file_name=filename,
+        mime="text/plain"
+    )
+
+def download_results(processed_text, validation_report, filename="results.txt"):
+    """Generate a downloadable link for processed text and validation report."""
+    combined_content = f"=== Processed Text ===\n{processed_text}\n\n=== Validation Report ===\n{validation_report}"
+
+    b64 = base64.b64encode(combined_content.encode()).decode()  # Encode the text file
+    href = f'<a href="data:file/txt;base64,{b64}" download="{filename}">📥 Click here to download results</a>'
+
+    st.markdown(href, unsafe_allow_html=True)
 
 
 def show_wordcloud(text):
