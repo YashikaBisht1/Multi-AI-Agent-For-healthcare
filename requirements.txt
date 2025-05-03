@@ -11,3 +11,4 @@ langchain-community
 transformers~=4.51.3
 torch~=2.6.0
 numpy~=2.2.4
+sacremoses

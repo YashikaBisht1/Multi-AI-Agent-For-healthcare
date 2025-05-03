@@ -8,26 +8,36 @@ class ChatbotAgent(AgentBase):
         self.use_biogpt = use_biogpt
 
         if self.use_biogpt:
-            self.tokenizer = AutoTokenizer.from_pretrained("microsoft/biogpt")
-            self.model = AutoModelForCausalLM.from_pretrained("microsoft/biogpt")
+            self.tokenizer = AutoTokenizer.from_pretrained("microsoft/BioGPT-Large")
+            self.model = AutoModelForCausalLM.from_pretrained("microsoft/BioGPT-Large")
 
     def execute(self, user_input):
         if self.use_biogpt:
-            inputs = self.tokenizer(user_input, return_tensors="pt")
+            prompt = f"<human>: {user_input}\n<bot>:"
+            inputs = self.tokenizer(prompt, return_tensors="pt")
             with torch.no_grad():
                 outputs = self.model.generate(
                     **inputs,
                     max_length=256,
                     do_sample=True,
                     top_p=0.9,
-                    temperature=0.8
+                    temperature=0.8,
+                    pad_token_id=self.tokenizer.eos_token_id
                 )
-            response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+            decoded = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+            # Remove echo and only return the bot response
+            if "<bot>:" in decoded:
+                response = decoded.split("<bot>:")[-1].strip()
+            else:
+                response = decoded.strip()
+
             return response
+
         else:
-            # Fall back to llama or your previous method
+            # Fall back to llama or another assistant
             messages = [
-                {"role": "system", "content": "You are a helpful AI assistant for medical research."},
+                {"role": "system", "content": "You are a helpful medical assistant for patients and researchers."},
                 {"role": "user", "content": user_input}
             ]
             return self.call_llama(messages)

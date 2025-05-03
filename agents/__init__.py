@@ -5,7 +5,7 @@ from .write_article_tool import WriteArticleTool
 from .sanitize_data_tool import SanitizeDataTool
 from .summarize_validator_agent import SummarizeValidatorAgent
 from .write_article_validator_agent import WriteArticleValidatorAgent
-from .sanitize_data_validator_agent import SanitizeDataValidatorAgent
+from .sanitize_data_validator_agent import SanitizeValidatorAgent
 from .refiner_agent import RefinerAgent # New import
 from .validator_agent import ValidatorAgent  # New import
 from .chatbot_agent import ChatbotAgent
@@ -19,7 +19,7 @@ class AgentManager:
             "sanitize_data": SanitizeDataTool(max_retries=max_retries, verbose=verbose),
             "summarize_validator": SummarizeValidatorAgent(max_retries=max_retries, verbose=verbose),
             "write_article_validator": WriteArticleValidatorAgent(max_retries=max_retries, verbose=verbose),
-            "sanitize_data_validator": SanitizeDataValidatorAgent(max_retries=max_retries, verbose=verbose),
+            "sanitize_data_validator": SanitizeValidatorAgent(max_retries=max_retries, verbose=verbose),
             "refiner": RefinerAgent(max_retries=max_retries, verbose=verbose),      # New agent
             "validator": ValidatorAgent(max_retries=max_retries, verbose=verbose) , # New agent
             "chatbot": ChatbotAgent(max_retries=max_retries, verbose=verbose,use_biogpt=True)       # New agent

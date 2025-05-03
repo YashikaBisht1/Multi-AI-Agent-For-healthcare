@@ -2,7 +2,6 @@
 from .agent_base import AgentBase
 import numpy as np
 
-
 class SummarizeValidatorAgent(AgentBase):
     def __init__(self, max_retries=2, verbose=True):
         super().__init__(name="SummarizeValidatorAgent", max_retries=max_retries, verbose=verbose)

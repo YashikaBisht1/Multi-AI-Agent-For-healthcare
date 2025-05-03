@@ -7,7 +7,6 @@ from agents import AgentManager
 from utils.logger import logger
 from dotenv import load_dotenv
 
-import base64
 
 # Load environment variables
 load_dotenv()
@@ -18,6 +17,9 @@ def main():
 
     st.markdown("""
     <style>
+    html, body, [class^="css"]  {
+        background-color: #f5f8ff;
+    }
     .main-header {
         font-size: 2.5rem;
         color: white;
@@ -37,28 +39,26 @@ def main():
         margin-bottom: 1rem;
     }
     .task-container {
-        background-color: #F8F9FA;
+        background-color: #ffffff;
         padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-    .result-box {
+    .result-box, .validation-box, .rating-box {
         background-color: white;
         padding: 1.5rem;
-        border-radius: 8px;
-        border-left: 4px solid #1E88E5;
+        border-radius: 10px;
         margin: 1rem 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .result-box {
+        border-left: 4px solid #43a047;
     }
     .validation-box {
-        padding: 1rem;
-        border-radius: 8px;
-        margin-top: 1rem;
+        border-left: 4px solid #fb8c00;
     }
     .rating-box {
-        padding: 1rem;
-        border-radius: 8px;
-        margin-top: 1rem;
-        background-color: #E3F2FD;
+        border-left: 4px solid #3949ab;
     }
     .stButton>button {
         background-color: #1E88E5;
@@ -75,19 +75,18 @@ def main():
         transform: translateY(-2px);
     }
     .stTextArea>div>div {
-        border-radius: 8px;
-        border: 2px solid #E3F2FD;
+        border-radius: 10px;
+        border: 2px solid #bbdefb;
     }
     .sidebar-content {
         padding: 1rem;
-        background-color: #F8F9FA;
-        border-radius: 8px;
+        background-color: #e3f2fd;
+        border-radius: 12px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("<div class='main-header'> Multi-Agent AI System For Healthcare with Validation</div>",
-                unsafe_allow_html=True)
+    st.markdown("<div class='main-header'> Multi-Agent AI System For Healthcare with Validation</div>", unsafe_allow_html=True)
 
     st.sidebar.title("Select Task")
     task = st.sidebar.selectbox("Choose a task:", [
@@ -189,34 +188,115 @@ def sanitize_data_section(agent_manager):
         if "sanitized_text" in st.session_state and "sanitized_validation" in st.session_state:
             download_results(st.session_state["sanitized_text"], st.session_state["sanitized_validation"],
                              "sanitized_data.txt")
+
+from PIL import Image
+import base64
+
+
 def chatbot_section(agent_manager):
+    st.markdown("""
+        <style>
+        .chat-bg {
+            background-image: url('https://images.unsplash.com/photo-1607746882042-944635dfe10e');
+            background-size: cover;
+            background-position: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chat-overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        .sub-header {
+            font-size: 32px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .chat-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .chat-left {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-right {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .message-block {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+        }
+
+        .user-msg {
+            background-color: #dbeafe;
+        }
+
+        .ai-msg {
+            background-color: #ede9fe;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<div class='chat-bg'><div class='chat-overlay'>", unsafe_allow_html=True)
     st.markdown("<div class='sub-header'>💬 AI Chatbot Assistant</div>", unsafe_allow_html=True)
 
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
 
-    # Toggle model selection
     use_biogpt = st.radio("🤖 Choose AI Model:", ["BioGPT", "LLaMA/Ollama"], horizontal=True) == "BioGPT"
 
     user_input = st.text_input("💡 Ask me anything about medical research or AI:")
 
-    if st.button("💬 Chat") and user_input:
-        chatbot_agent = agent_manager.get_agent("chatbot", use_biogpt=use_biogpt)
+    st.markdown("<div class='chat-container'>", unsafe_allow_html=True)
 
-        with st.spinner("🤖 Thinking..."):
-            try:
-                response = chatbot_agent.execute(user_input)
-                st.session_state.chat_history.append(("🧑‍💻 You", user_input))
-                st.session_state.chat_history.append(("🤖 AI", response))
-            except Exception as e:
-                st.error(f"⚠️ Chatbot Error: {e}")
-                logger.error(f"ChatbotAgent Error: {e}")
+    # Left: Chatbot Image
+    with st.container():
+        st.markdown("<div class='chat-left'>", unsafe_allow_html=True)
+        chatbot_image = Image.open("chatbot_image.png")
+        st.image(chatbot_image, width=300)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    for role, message in st.session_state.chat_history:
-        st.markdown(f"**{role}:** {message}")
+    # Right: Chat Interface
+    with st.container():
+        st.markdown("<div class='chat-right'>", unsafe_allow_html=True)
 
-    if st.button("🗑 Clear Chat History"):
-        st.session_state.chat_history = []
+        if st.button("💬 Chat") and user_input:
+            chatbot_agent = agent_manager.get_agent("chatbot", use_biogpt=use_biogpt)
+
+            with st.spinner("🤖 Thinking..."):
+                try:
+                    response = chatbot_agent.execute(user_input)
+                    st.session_state.chat_history.append(("🧑‍💻 You", user_input))
+                    st.session_state.chat_history.append(("🤖 AI", response))
+                except Exception as e:
+                    st.error(f"⚠️ Chatbot Error: {e}")
+
+        for role, message in st.session_state.chat_history:
+            css_class = "user-msg" if "You" in role else "ai-msg"
+            st.markdown(f"<div class='message-block {css_class}'><strong>{role}:</strong> {message}</div>", unsafe_allow_html=True)
+
+        if st.button("🗑 Clear Chat History"):
+            st.session_state.chat_history = []
+
+        st.markdown("</div>", unsafe_allow_html=True)  # Close .chat-right
+
+    st.markdown("</div>", unsafe_allow_html=True)  # Close .chat-container
+    st.markdown("</div></div>", unsafe_allow_html=True)  # Close overlays
 
 
 
@@ -345,7 +425,6 @@ def download_results(processed_text, validation_report, filename="results.txt"):
     href = f'<a href="data:file/txt;base64,{b64}" download="{filename}">📥 Click here to download results</a>'
 
     st.markdown(href, unsafe_allow_html=True)
-
 
 def show_wordcloud(text):
     stopwords = set(STOPWORDS)
