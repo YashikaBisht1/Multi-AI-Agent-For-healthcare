@@ -9,7 +9,7 @@ class SanitizeValidatorAgent(AgentBase):
         self.temperature = 0.7
         self.max_tokens = 512
 
-    def execute(self, original_data, sanitized_data):
+    def execute(self, original_data, sanitized_data, human_rating=None):
         """
         Validates PHI removal from sanitized data and applies RLHF on feedback.
         """
@@ -31,33 +31,22 @@ class SanitizeValidatorAgent(AgentBase):
         try:
             response = self.call_llama(messages, temperature=self.temperature, max_tokens=self.max_tokens)
             ai_score = self.extract_score(response)
-            human_score = self.prompt_human_rating(response)
-            self.store_feedback(original_data, sanitized_data, ai_score, human_score)
+            if human_rating is None:
+                human_rating = 3
             self.tune_hyperparams()
 
-            avg_score = round((ai_score + human_score) / 2, 1)
-            return response, avg_score
+            avg_score = round((ai_score + human_rating) / 2, 1)
+            return response, ai_score, human_rating, avg_score
 
         except Exception as e:
             print(f"[SanitizeValidatorAgent Error] {e}")
-            return "Validation failed.", 3.0
+            return "Validation failed.", 3, 3, 3.0
 
     def extract_score(self, response):
         try:
             return min(max(int(response.split("Rating:")[-1].strip().split()[0]), 1), 5)
         except Exception:
             return 3
-
-    def prompt_human_rating(self, response):
-        print("\n📋 AI Validation:\n", response)
-        while True:
-            try:
-                score = int(input("🧠 Your Rating (1-5): "))
-                if 1 <= score <= 5:
-                    return score
-            except ValueError:
-                pass
-            print("⚠️ Please enter a valid number between 1 and 5.")
 
     def store_feedback(self, original, sanitized, ai, human):
         self.validation_history.append({

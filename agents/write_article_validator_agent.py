@@ -8,7 +8,7 @@ class WriteArticleValidatorAgent(AgentBase):
         self.temperature = 0.7
         self.max_tokens = 512
 
-    def execute(self, topic, article):
+    def execute(self, topic, article, human_rating=None):
         system_message = "You are an AI assistant that validates research articles."
         user_content = (
             "Given the topic and the article, assess whether the article comprehensively covers the topic, follows a logical structure, and maintains academic standards.\n"
@@ -24,11 +24,11 @@ class WriteArticleValidatorAgent(AgentBase):
         validation_response = self.call_llama(messages, temperature=self.temperature, max_tokens=self.max_tokens)
 
         ai_rating = self.extract_validation_score(validation_response)
-        human_rating = self.get_human_feedback(validation_response)
-        self.store_feedback(topic, article, ai_rating, human_rating)
+        if human_rating is None:
+            human_rating = 3
         self.optimize_with_rl()
 
-        return validation_response
+        return validation_response, ai_rating, human_rating
 
     def extract_validation_score(self, response):
         try:
@@ -36,19 +36,6 @@ class WriteArticleValidatorAgent(AgentBase):
             return min(max(score, 1), 5)
         except Exception:
             return 3
-
-    def get_human_feedback(self, response):
-        print("\n🔍 AI Validation Response:")
-        print(response)
-        while True:
-            try:
-                rating = int(input("🤖 Please rate this validation (1-5): "))
-                if 1 <= rating <= 5:
-                    return rating
-                else:
-                    print("❌ Invalid input. Enter a number between 1 and 5.")
-            except ValueError:
-                print("❌ Invalid input. Enter a numeric value.")
 
     def store_feedback(self, topic, article, ai_rating, human_rating):
         feedback_entry = {

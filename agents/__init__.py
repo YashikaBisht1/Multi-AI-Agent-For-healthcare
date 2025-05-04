@@ -22,13 +22,12 @@ class AgentManager:
             "sanitize_data_validator": SanitizeValidatorAgent(max_retries=max_retries, verbose=verbose),
             "refiner": RefinerAgent(max_retries=max_retries, verbose=verbose),      # New agent
             "validator": ValidatorAgent(max_retries=max_retries, verbose=verbose) , # New agent
-            "chatbot": ChatbotAgent(max_retries=max_retries, verbose=verbose,use_biogpt=True)       # New agent
-
+            "chatbot": ChatbotAgent(max_retries=max_retries, verbose=verbose)       # New agent
         }
 
     def get_agent(self, agent_name, **kwargs):
         if agent_name == "chatbot":
-            return ChatbotAgent(max_retries=2, verbose=True, **kwargs)  # Pass kwargs like use_biogpt
+            return ChatbotAgent(max_retries=2, verbose=True)  # Always use Ollama
         agent = self.agents.get(agent_name)
         if not agent:
             raise ValueError(f"Agent '{agent_name}' not found.")

@@ -6,11 +6,37 @@ from wordcloud import WordCloud, STOPWORDS
 from agents import AgentManager
 from utils.logger import logger
 from dotenv import load_dotenv
+from agents.agent_base import AgentBase
+from io import BytesIO
+from datetime import datetime
+import numpy as np
+import json
+import os
 
 
 # Load environment variables
 load_dotenv()
 
+# Cache the wordcloud generation
+@st.cache_data
+def generate_wordcloud(text):
+    stopwords = set(STOPWORDS)
+    wordcloud = WordCloud(width=800, height=400, max_words=25, 
+                         background_color='white', colormap='Set2',
+                         collocations=False, stopwords=STOPWORDS).generate(text)
+    return wordcloud
+
+# Cache the agent manager initialization
+@st.cache_resource
+def get_agent_manager():
+    return AgentManager(max_retries=2, verbose=True)
+
+def show_wordcloud(text):
+    wordcloud = generate_wordcloud(text)
+    plt.figure(figsize=(10, 5))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+    st.pyplot(plt)
 
 def main():
     st.set_page_config(page_title="Multi-Agent AI System", layout="wide")
@@ -96,7 +122,7 @@ def main():
         "💬 AI Chatbot Assistant"
     ])
 
-    agent_manager = AgentManager(max_retries=2, verbose=True)
+    agent_manager = get_agent_manager()
 
     if task == "🏥 Summarize Medical Text":
         summarize_section(agent_manager)
@@ -135,18 +161,52 @@ def write_and_refine_article_section(agent_manager):
 
         with st.spinner("🔍 Validating article..."):
             try:
-                validation = validator_agent.execute(original_data=text, refined_data=refined_text)
-                st.session_state["article_validation"] = validation
-                st.markdown(f"<div class='validation-box'><strong>🧐 Validation Report:</strong><br>{validation}</div>",
-                            unsafe_allow_html=True)
+                validation_response, ai_rating, _ = validator_agent.execute(topic=text, article=refined_text)
+                st.session_state["article_validation"] = validation_response
+                st.session_state["article_ai_score"] = ai_rating
+                st.markdown(f"<div class='validation-box'><strong>🧐 Validation Report:</strong><br>{validation_response}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='rating-box'><strong>🤖 AI Rating:</strong> {ai_rating:.1f} / 5</div>", unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"⚠️ Validation Error: {e}")
                 logger.error(f"WriteArticleValidatorAgent Error: {e}")
                 return
 
-        if "refined_text" in st.session_state and "article_validation" in st.session_state:
-            download_results(st.session_state["refined_text"], st.session_state["article_validation"],
-                             "refined_article.txt")
+    if "article_validation" in st.session_state and "refined_text" in st.session_state and "article_ai_score" in st.session_state:
+        human_score = st.number_input("🧠 Your Rating (1.0 to 5.0):", min_value=1.0, max_value=5.0, step=0.1, key="article_rating_input")
+        if st.button("Submit Article Rating"):
+            ai_score = st.session_state["article_ai_score"]
+            refined_text = st.session_state["refined_text"]
+            validation_response = st.session_state["article_validation"]
+            avg_score = round((ai_score + human_score) / 2, 1)
+            st.session_state["article_validation_rating"] = human_score
+            st.markdown(f"<div class='rating-box'><strong>📊 Average Rating:</strong> {avg_score} / 5</div>", unsafe_allow_html=True)
+            # Store feedback with human rating
+            validator_agent = agent_manager.get_agent("write_article_validator")
+            validator_agent.store_feedback(text, refined_text, ai_score, human_score)
+            store_feedback_json("write_article", {
+                "original": text,
+                "refined": refined_text,
+                "ai_rating": ai_score,
+                "human_rating": human_score,
+                "validation": validation_response
+            })
+            improved_article = None
+            if avg_score < 3.5:
+                with st.spinner("🔁 Improving article..."):
+                    try:
+                        improved_prompt = (
+                            f"Improve the following research article based on the original. "
+                            f"Ensure it's more concise, accurate, and medically appropriate.\n\n"
+                            f"Original Article:\n{text}\n\nRefined Article:\n{refined_text}"
+                        )
+                        improved_article = validator_agent.call_llama([
+                            {"role": "system", "content": "You are a research article improver."},
+                            {"role": "user", "content": improved_prompt}
+                        ])
+                        st.markdown(f"<div class='result-box'><strong>🔁 Improved Article:</strong><br>{improved_article}</div>", unsafe_allow_html=True)
+                    except Exception as e:
+                        st.warning(f"⚠️ Couldn't improve article: {e}")
+            download_article_report(text, refined_text, validation_response, ai_score, human_score, improved_article)
 
 
 def sanitize_data_section(agent_manager):
@@ -176,18 +236,52 @@ def sanitize_data_section(agent_manager):
 
         with st.spinner("🔍 Validating sanitization..."):
             try:
-                validation = validator_agent.execute(original_data=text, sanitized_data=sanitized_text)
-                st.session_state["sanitized_validation"] = validation
-                st.markdown(f"<div class='validation-box'><strong>🧐 Validation Report:</strong><br>{validation}</div>",
-                            unsafe_allow_html=True)
+                validation_response, ai_score, _, _ = validator_agent.execute(original_data=text, sanitized_data=sanitized_text)
+                st.session_state["sanitized_validation"] = validation_response
+                st.session_state["sanitize_ai_score"] = ai_score
+                st.markdown(f"<div class='validation-box'><strong>🧐 Validation Report:</strong><br>{validation_response}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='rating-box'><strong>🤖 AI Rating:</strong> {ai_score:.1f} / 5</div>", unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"⚠️ Validation Error: {e}")
                 logger.error(f"SanitizeDataValidatorAgent Error: {e}")
                 return
 
-        if "sanitized_text" in st.session_state and "sanitized_validation" in st.session_state:
-            download_results(st.session_state["sanitized_text"], st.session_state["sanitized_validation"],
-                             "sanitized_data.txt")
+    if "sanitized_validation" in st.session_state and "sanitized_text" in st.session_state and "sanitize_ai_score" in st.session_state:
+        human_score = st.number_input("🧠 Your Rating (1.0 to 5.0):", min_value=1.0, max_value=5.0, step=0.1, key="sanitize_rating_input")
+        if st.button("Submit Sanitize Rating"):
+            ai_score = st.session_state["sanitize_ai_score"]
+            sanitized_text = st.session_state["sanitized_text"]
+            validation_response = st.session_state["sanitized_validation"]
+            avg_score = round((ai_score + human_score) / 2, 1)
+            st.session_state["sanitized_validation_rating"] = human_score
+            st.markdown(f"<div class='rating-box'><strong>📊 Average Rating:</strong> {avg_score} / 5</div>", unsafe_allow_html=True)
+            # Store feedback with human rating
+            validator_agent = agent_manager.get_agent("sanitize_data_validator")
+            validator_agent.store_feedback(text, sanitized_text, ai_score, human_score)
+            store_feedback_json("sanitize", {
+                "original": text,
+                "sanitized": sanitized_text,
+                "ai_rating": ai_score,
+                "human_rating": human_score,
+                "validation": validation_response
+            })
+            improved_sanitized = None
+            if avg_score < 3.5:
+                with st.spinner("🔁 Improving sanitized data..."):
+                    try:
+                        improved_prompt = (
+                            f"Improve the following sanitized medical data based on the original. "
+                            f"Ensure all PHI is masked and the data is more accurate.\n\n"
+                            f"Original Data:\n{text}\n\nSanitized Data:\n{sanitized_text}"
+                        )
+                        improved_sanitized = validator_agent.call_llama([
+                            {"role": "system", "content": "You are a medical data sanitizer improver."},
+                            {"role": "user", "content": improved_prompt}
+                        ])
+                        st.markdown(f"<div class='result-box'><strong>🔁 Improved Sanitized Data:</strong><br>{improved_sanitized}</div>", unsafe_allow_html=True)
+                    except Exception as e:
+                        st.warning(f"⚠️ Couldn't improve sanitized data: {e}")
+            download_sanitize_report(text, sanitized_text, validation_response, ai_score, human_score, improved_sanitized)
 
 from PIL import Image
 import base64
@@ -258,8 +352,6 @@ def chatbot_section(agent_manager):
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
 
-    use_biogpt = st.radio("🤖 Choose AI Model:", ["BioGPT", "LLaMA/Ollama"], horizontal=True) == "BioGPT"
-
     user_input = st.text_input("💡 Ask me anything about medical research or AI:")
 
     st.markdown("<div class='chat-container'>", unsafe_allow_html=True)
@@ -276,7 +368,7 @@ def chatbot_section(agent_manager):
         st.markdown("<div class='chat-right'>", unsafe_allow_html=True)
 
         if st.button("💬 Chat") and user_input:
-            chatbot_agent = agent_manager.get_agent("chatbot", use_biogpt=use_biogpt)
+            chatbot_agent = agent_manager.get_agent("chatbot")
 
             with st.spinner("🤖 Thinking..."):
                 try:
@@ -290,7 +382,7 @@ def chatbot_section(agent_manager):
             css_class = "user-msg" if "You" in role else "ai-msg"
             st.markdown(f"<div class='message-block {css_class}'><strong>{role}:</strong> {message}</div>", unsafe_allow_html=True)
 
-        if st.button("🗑 Clear Chat History"):
+        if st.button("🔄 Clear Chat History"):
             st.session_state.chat_history = []
 
         st.markdown("</div>", unsafe_allow_html=True)  # Close .chat-right
@@ -327,54 +419,45 @@ def summarize_section(agent_manager):
 
         with st.spinner("🔄 Validating summary..."):
             try:
-                validation, ai_score = validator_agent.execute(original_text=text, summary=summary)
-                st.session_state["validation"] = validation
-                st.markdown(f"<div class='validation-box'><strong>🔍 Validation Report:</strong><br>{validation}</div>", unsafe_allow_html=True)
+                validation_response, ai_score, _, _ = validator_agent.execute(original_text=text, summary=summary)
+                st.session_state["validation"] = validation_response
+                st.session_state["ai_score"] = ai_score
+                st.markdown(f"<div class='validation-box'><strong>🔍 Validation Report:</strong><br>{validation_response}</div>", unsafe_allow_html=True)
                 st.markdown(f"<div class='rating-box'><strong>🤖 AI Rating:</strong> {ai_score:.1f} / 5</div>", unsafe_allow_html=True)
-
-                # Human input
-                human_score = st.number_input("🧠 Your Rating (1.0 to 5.0):", min_value=1.0, max_value=5.0, step=0.1, key="rating_input")
-                final_summary = summary
-
-                if human_score:
-                    avg_score = round((ai_score + human_score) / 2, 1)
-                    st.session_state["validation_rating"] = human_score
-                    st.markdown(f"<div class='rating-box'><strong>📊 Average Rating:</strong> {avg_score} / 5</div>", unsafe_allow_html=True)
-
-                    # Improve if needed
-                    if avg_score < 3.5:
-                        with st.spinner("🔁 Improving summary..."):
-                            try:
-                                improved_prompt = (
-                                    f"Improve the following summary based on the original text. "
-                                    f"Ensure it's more concise, accurate, and medically appropriate.\n\n"
-                                    f"Original Text:\n{text}\n\nSummary:\n{summary}"
-                                )
-                                improved_summary = validator_agent.call_llama([
-                                    {"role": "system", "content": "You are a medical summarization improver."},
-                                    {"role": "user", "content": improved_prompt}
-                                ])
-                                final_summary = improved_summary
-                                st.markdown(f"<div class='result-box'><strong>🔁 Improved Summary:</strong><br>{improved_summary}</div>", unsafe_allow_html=True)
-                            except Exception as e:
-                                st.warning(f"⚠️ Couldn't improve summary: {e}")
-
-                # Download report
-                download_summary_report(
-                    original_text=text,
-                    summary=final_summary,
-                    validation_report=validation,
-                    ai_rating=ai_score,
-                    human_rating=human_score
-                )
-
-
             except Exception as e:
                 st.error(f"⚠️ Validation Error: {e}")
                 logger.error(f"SummarizeValidatorAgent Error: {e}")
+                return
 
-from io import BytesIO
-from datetime import datetime
+    if "validation" in st.session_state and "summary" in st.session_state and "ai_score" in st.session_state:
+        human_score = st.number_input("🧠 Your Rating (1.0 to 5.0):", min_value=1.0, max_value=5.0, step=0.1, key="rating_input")
+        if st.button("Submit Rating"):
+            ai_score = st.session_state["ai_score"]
+            summary = st.session_state["summary"]
+            validation_response = st.session_state["validation"]
+            avg_score = round((ai_score + human_score) / 2, 1)
+            st.session_state["validation_rating"] = human_score
+            st.markdown(f"<div class='rating-box'><strong>📊 Average Rating:</strong> {avg_score} / 5</div>", unsafe_allow_html=True)
+            # Store feedback with human rating
+            validator_agent = agent_manager.get_agent("summarize_validator")
+            validator_agent.store_feedback(text, summary, ai_score, human_score)
+            store_feedback_json("summarize", {
+                "original": text,
+                "summary": summary,
+                "ai_rating": ai_score,
+                "human_rating": human_score,
+                "validation": validation_response
+            })
+            # Optionally allow improvement and download as before...
+            # Download report
+            download_summary_report(
+                original_text=text,
+                summary=summary,
+                validation_report=validation_response,
+                ai_rating=ai_score,
+                human_rating=human_score
+            )
+
 
 def download_summary_report(original_text, summary, validation_report, ai_rating, human_rating):
     """
@@ -426,117 +509,12 @@ def download_results(processed_text, validation_report, filename="results.txt"):
 
     st.markdown(href, unsafe_allow_html=True)
 
-def show_wordcloud(text):
-    stopwords = set(STOPWORDS)
-    wordcloud = WordCloud(width=800, height=400, max_words=25, background_color='white', colormap='Set2',
-                      collocations=False, stopwords=STOPWORDS).generate(text)
-    plt.figure(figsize=(10, 5))
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis("off")
-    st.pyplot(plt)
-
-class WriteArticleValidatorAgent(AgentBase):
-    def __init__(self, max_retries=2, verbose=True):
-        super().__init__(name="WriteArticleValidatorAgent", max_retries=max_retries, verbose=verbose)
-        self.validation_history = []  # Store validation feedback
-        self.temperature = 0.7
-        self.max_tokens = 512
-
-    def execute(self, topic, article):
-        """
-        Validates the quality and completeness of a research article.
-        """
-        system_message = "You are an AI assistant that validates research articles."
-        user_content = (
-            "Given the topic and the article, assess whether the article comprehensively covers the topic, "
-            "follows a logical structure, and maintains academic standards.\n"
-            "Provide a brief analysis and rate the article on a scale of 1 to 5, where 5 indicates excellent quality.\n\n"
-            f"Topic:\n{topic}\n\n"
-            f"Article:\n{article}\n\n"
-            "Validation Report:"
-        )
-        messages = [
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": user_content}
-        ]
-
-        validation_response = self.call_llama(messages, temperature=self.temperature, max_tokens=self.max_tokens)
-        ai_rating = self.extract_validation_score(validation_response)
-        human_rating = self.get_human_feedback(validation_response)
-
-        average_score = (ai_rating + human_rating) / 2
-
-        self.store_feedback(topic, article, ai_rating, human_rating)
-        self.optimize_with_rl()
-
-        return validation_response, average_score
-
-    def extract_validation_score(self, response):
-        """
-        Extracts the AI-generated rating from the response (1-5 scale).
-        """
-        try:
-            score = int(response.split("Rating:")[-1].strip().split()[0])
-            return min(max(score, 1), 5)
-        except Exception:
-            return 3  # Default neutral rating if extraction fails
-
-    def get_human_feedback(self, response):
-        """
-        Requests human validation feedback for reinforcement learning.
-        """
-        print("\n🔍 AI Validation Response:")
-        print(response)
-        while True:
-            try:
-                rating = int(input("🤖 Please rate this article validation (1-5): "))
-                if 1 <= rating <= 5:
-                    return rating
-                else:
-                    print("❌ Invalid input. Enter a number between 1 and 5.")
-            except ValueError:
-                print("❌ Invalid input. Enter a numeric value.")
-
-    def store_feedback(self, topic, article, ai_rating, human_rating):
-        """
-        Stores article validation history for RLHF.
-        """
-        feedback_entry = {
-            "topic": topic,
-            "article": article,
-            "ai_rating": ai_rating,
-            "human_rating": human_rating
-        }
-        self.validation_history.append(feedback_entry)
-        if self.verbose:
-            print(f"[RLHF] Stored AI Rating: {ai_rating}, Human Rating: {human_rating}")
-
-    def optimize_with_rl(self):
-        """
-        Reinforcement learning: adjust temperature and max_tokens based on feedback trends.
-        """
-        if len(self.validation_history) < 5:
-            return
-
-        ratings = np.array([entry["human_rating"] for entry in self.validation_history])
-        avg_rating = np.mean(ratings)
-
-        if avg_rating < 3:
-            self.temperature = max(self.temperature - 0.05, 0.3)
-        elif avg_rating > 4:
-            self.temperature = min(self.temperature + 0.05, 1.0)
-
-        if any(len(entry["article"]) > self.max_tokens * 0.9 for entry in self.validation_history):
-            self.max_tokens = min(self.max_tokens + 50, 1024)
-
-        if self.verbose:
-            print(f"[RLHF] Adjusted Settings → Temperature: {self.temperature}, Max Tokens: {self.max_tokens}")
-
-def download_sanitize_report(original_data, sanitized_data, validation_report):
+def download_sanitize_report(original_data, sanitized_data, validation_report, ai_rating, human_rating, improved_sanitized=None):
     """
     Creates and enables downloading of a sanitization report.
-    Includes original data, sanitized output, and validation notes.
+    Includes original data, sanitized output, validation notes, ratings, and improved sanitized content if available.
     """
+    avg_rating = round((ai_rating + human_rating) / 2, 1)
     report = f"""🛡 SANITIZED DATA REPORT
 Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 {"="*60}
@@ -551,7 +529,15 @@ Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 {"="*60}
 🔍 VALIDATION REPORT:
 {validation_report.strip()}
+
+{"="*60}
+📊 RATINGS:
+🤖 AI Rating     : {ai_rating} / 5
+🧠 Human Rating  : {human_rating} / 5
+📈 Average Rating: {avg_rating} / 5
 """
+    if improved_sanitized:
+        report += f"\n{'='*60}\n✨ IMPROVED SANITIZED OUTPUT:\n{improved_sanitized.strip()}\n"
 
     buffer = BytesIO()
     buffer.write(report.encode())
@@ -565,12 +551,12 @@ Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         mime="text/plain"
     )
 
-
-def download_article_report(original_article, refined_article, validation_report):
+def download_article_report(original_article, refined_article, validation_report, ai_rating, human_rating, improved_article=None):
     """
     Creates and enables downloading of an article writing/refinement report.
-    Includes original article, refined version, and validation.
+    Includes original article, refined version, validation, ratings, and improved article if available.
     """
+    avg_rating = round((ai_rating + human_rating) / 2, 1)
     report = f"""📝 RESEARCH ARTICLE REPORT
 Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 {"="*60}
@@ -585,7 +571,15 @@ Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 {"="*60}
 🔍 VALIDATION REPORT:
 {validation_report.strip()}
+
+{"="*60}
+📊 RATINGS:
+🤖 AI Rating     : {ai_rating} / 5
+🧠 Human Rating  : {human_rating} / 5
+📈 Average Rating: {avg_rating} / 5
 """
+    if improved_article:
+        report += f"\n{'='*60}\n✨ IMPROVED ARTICLE:\n{improved_article.strip()}\n"
 
     buffer = BytesIO()
     buffer.write(report.encode())
@@ -599,6 +593,19 @@ Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         mime="text/plain"
     )
 
+FEEDBACK_FILE = "feedback_store.json"
+
+def store_feedback_json(section, feedback_entry):
+    if os.path.exists(FEEDBACK_FILE):
+        with open(FEEDBACK_FILE, "r") as f:
+            data = json.load(f)
+    else:
+        data = {}
+    if section not in data:
+        data[section] = []
+    data[section].append(feedback_entry)
+    with open(FEEDBACK_FILE, "w") as f:
+        json.dump(data, f, indent=2)
 
 
 if __name__ == "__main__":

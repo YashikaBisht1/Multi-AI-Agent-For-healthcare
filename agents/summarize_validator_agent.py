@@ -9,7 +9,7 @@ class SummarizeValidatorAgent(AgentBase):
         self.temperature = 0.7
         self.max_tokens = 512
 
-    def execute(self, original_text, summary):
+    def execute(self, original_text, summary, human_rating=None):
         """
         Validates the accuracy and conciseness of a medical summary.
         """
@@ -28,14 +28,16 @@ class SummarizeValidatorAgent(AgentBase):
 
         validation_response = self.call_llama(messages, temperature=self.temperature, max_tokens=self.max_tokens)
         ai_rating = self.extract_validation_score(validation_response)
-        human_rating = self.get_human_feedback(validation_response)
+
+        # Use provided human_rating or default to 3 if not given
+        if human_rating is None:
+            human_rating = 3
 
         average_score = (ai_rating + human_rating) / 2
 
-        self.store_feedback(original_text, summary, ai_rating, human_rating)
         self.optimize_with_rl()
 
-        return validation_response, average_score
+        return validation_response, ai_rating, human_rating, average_score
 
     def extract_validation_score(self, response):
         """
@@ -46,22 +48,6 @@ class SummarizeValidatorAgent(AgentBase):
             return min(max(score, 1), 5)
         except Exception:
             return 3  # Default neutral rating if extraction fails
-
-    def get_human_feedback(self, response):
-        """
-        Requests human validation feedback for reinforcement learning.
-        """
-        print("\n🔍 AI Validation Response:")
-        print(response)
-        while True:
-            try:
-                rating = int(input("🤖 Please rate this summary validation (1-5): "))
-                if 1 <= rating <= 5:
-                    return rating
-                else:
-                    print("❌ Invalid input. Enter a number between 1 and 5.")
-            except ValueError:
-                print("❌ Invalid input. Enter a numeric value.")
 
     def store_feedback(self, original, summary, ai_rating, human_rating):
         """
