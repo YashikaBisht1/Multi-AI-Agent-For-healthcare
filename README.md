@@ -30,7 +30,8 @@ The **Multi-Agent AI App with Ollama** is a Python-based application leveraging 
 
 ## Architecture
 
-![Flowchart.png](Flowchart.png)
+![Flowchart](https://github.com/user-attachments/assets/33082bf4-b130-4dc1-9ad5-0c1afee63c71)
+
 
 
 ### Components Breakdown
