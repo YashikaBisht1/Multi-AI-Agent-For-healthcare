@@ -30,45 +30,8 @@ The **Multi-Agent AI App with Ollama** is a Python-based application leveraging 
 
 ## Architecture
 
-```
-+-------------------+
-|       User        |
-+---------+---------+
-          |
-          | Interacts via
-          v
-+---------+---------+
-|    Streamlit App  |
-+---------+---------+
-          |
-          | Sends task requests to
-          v
-+---------+---------+
-|  Agent Manager    |
-+---------+---------+
-          |
-          +---------------------------------------------+
-          |                      |                      |
-          v                      v                      v
-+---------+---------+  +---------+---------+  +---------+---------+
-|  Summarize Agent  |  |  Write Article    |  |  Sanitize Data    |
-|  (Generates summary)| |  (Generates draft)| |  (Removes PHI)    |
-+---------+---------+  +---------+---------+  +---------+---------+
-          |                      |                      |
-          v                      v                      v
-+---------+---------+  +---------+---------+  +---------+---------+
-|Summarize Validator|  | Refiner Agent      |  |Sanitize Validator |
-|      Agent        |  |  (Enhances draft)  |  |      Agent        |
-+---------+---------+  +---------+----------+ +----------+--------+
-          |                      |                      |
-          |                      |                      |
-          +-----------+----------+-----------+----------+
-                      |                      |
-                      v                      v
-                +-----+-------+        +-----+-------+
-                |   Logger    |        |   Logger    |
-                +-------------+        +-------------+
-```
+![Flowchart.png](Flowchart.png)
+
 
 ### Components Breakdown
 

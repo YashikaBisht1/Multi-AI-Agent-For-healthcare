@@ -878,6 +878,33 @@ To prevent anemia, it's essential to:
 3. **Avoid heavy bleeding**: Manage heavy menstrual periods or gastrointestinal bleeding by practicing good hygiene and using protective measures.
 
 I hope this helps you understand anemia better! Do you have any specific questions about anemia?
+2025-04-08T21:40:21.673911+0530 INFO [ChatbotAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-08T21:40:21.673911+0530 DEBUG   system: You are a helpful and knowledgeable AI assistant specialized in medical research and healthcare.
+2025-04-08T21:40:21.679004+0530 DEBUG   user: What are symptoms of anemia?
+2025-04-08T21:40:22.150415+0530 ERROR [ChatbotAgent] Ollama error: model requires more system memory (2.8 GiB) than is available (2.7 GiB) (status code: 500) (Retry 1/2)
+2025-04-08T21:40:22.151505+0530 INFO [ChatbotAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-08T21:40:22.152897+0530 DEBUG   system: You are a helpful and knowledgeable AI assistant specialized in medical research and healthcare.
+2025-04-08T21:40:22.152897+0530 DEBUG   user: What are symptoms of anemia?
+2025-04-08T21:40:22.286496+0530 ERROR [ChatbotAgent] Ollama error: model requires more system memory (2.8 GiB) than is available (2.7 GiB) (status code: 500) (Retry 2/2)
+2025-04-08T21:40:22.286496+0530 ERROR ChatbotAgent Error: [ChatbotAgent] Failed to get response from Ollama after 2 retries.
+2025-04-08T21:40:26.000162+0530 INFO [ChatbotAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-08T21:40:26.006179+0530 DEBUG   system: You are a helpful and knowledgeable AI assistant specialized in medical research and healthcare.
+2025-04-08T21:40:26.007191+0530 DEBUG   user: What are symptoms of anemia?
+2025-04-08T21:40:26.137784+0530 ERROR [ChatbotAgent] Ollama error: model requires more system memory (2.8 GiB) than is available (2.6 GiB) (status code: 500) (Retry 1/2)
+2025-04-08T21:40:26.138353+0530 INFO [ChatbotAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-08T21:40:26.138353+0530 DEBUG   system: You are a helpful and knowledgeable AI assistant specialized in medical research and healthcare.
+2025-04-08T21:40:26.138353+0530 DEBUG   user: What are symptoms of anemia?
+2025-04-08T21:40:26.256550+0530 ERROR [ChatbotAgent] Ollama error: model requires more system memory (2.8 GiB) than is available (2.7 GiB) (status code: 500) (Retry 2/2)
+2025-04-08T21:40:26.257169+0530 ERROR ChatbotAgent Error: [ChatbotAgent] Failed to get response from Ollama after 2 retries.
+2025-04-08T21:43:19.666682+0530 INFO [ChatbotAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-08T21:43:19.668853+0530 DEBUG   system: You are a helpful and knowledgeable AI assistant specialized in medical research and healthcare.
+2025-04-08T21:43:19.668853+0530 DEBUG   user: What are the symptoms of anemia?
+2025-04-08T21:43:19.805998+0530 ERROR [ChatbotAgent] Ollama error: model requires more system memory (3.5 GiB) than is available (3.5 GiB) (status code: 500) (Retry 1/2)
+2025-04-08T21:43:19.805998+0530 INFO [ChatbotAgent] Sending messages to Ollama (llama3.2:3b):
+2025-04-08T21:43:19.808653+0530 DEBUG   system: You are a helpful and knowledgeable AI assistant specialized in medical research and healthcare.
+2025-04-08T21:43:19.808653+0530 DEBUG   user: What are the symptoms of anemia?
+2025-04-08T21:43:19.932006+0530 ERROR [ChatbotAgent] Ollama error: model requires more system memory (3.5 GiB) than is available (3.5 GiB) (status code: 500) (Retry 2/2)
+2025-04-08T21:43:19.933102+0530 ERROR ChatbotAgent Error: [ChatbotAgent] Failed to get response from Ollama after 2 retries.
 2025-04-09T20:49:35.753755+0530 INFO [ChatbotAgent] Sending messages to Ollama (llama3.2:3b):
 2025-04-09T20:49:35.765889+0530 DEBUG   system: You are a helpful and knowledgeable AI assistant specialized in medical research and healthcare.
 2025-04-09T20:49:35.767025+0530 DEBUG   user: Hello tell me about anemia
@@ -1288,3 +1315,37 @@ Validation Report:
 **Rating: 5**
 
 The summary is concise, clear, and comprehensive, providing a good understanding of the disorder without omitting essential information. The language used is straightforward, making it accessible to a general audience or those without a medical background. Overall, the summary effectively conveys the main ideas of the original text.
+2025-05-05T12:16:41.948731+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-05-05T12:16:41.954921+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-05-05T12:16:41.954921+0530 DEBUG   user: Summarize the following medical text concisely:
+
+"A 72-year-old female with a history of chronic obstructive pulmonary disease (COPD), hypertension, and osteoporosis presented to the emergency department with worsening shortness of breath and a persistent productive cough over the past two weeks. She reported increased fatigue and reduced exercise tolerance. On examination, she was tachypneic with a respiratory rate of 24 breaths per minute, had bilateral wheezing on auscultation, and an oxygen saturation of 88% on room air. A chest X-ray showed increased bronchovascular markings but no focal consolidation. Laboratory tests revealed an elevated white blood cell count and C-reactive protein. She was diagnosed with an acute exacerbation of COPD, likely secondary to a bacterial infection. She was started on nebulized bronchodilators, systemic corticosteroids, and empirical antibiotic therapy with azithromycin. Over the next 48 hours, her symptoms improved, and she was discharged on an optimized COPD maintenance regimen, including long-acting bronchodilators, inhaled corticosteroids, and a short course of oral prednisone. She was advised to follow up with her pulmonologist in two weeks and was given instructions on proper inhaler technique and pulmonary rehabilitation exercises.
+
+Summary:
+2025-05-05T12:16:42.511221+0530 ERROR [SummarizeTool] Ollama error: model requires more system memory (3.5 GiB) than is available (3.1 GiB) (status code: 500) (Retry 1/2)
+2025-05-05T12:16:42.513130+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-05-05T12:16:42.513130+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-05-05T12:16:42.514432+0530 DEBUG   user: Summarize the following medical text concisely:
+
+"A 72-year-old female with a history of chronic obstructive pulmonary disease (COPD), hypertension, and osteoporosis presented to the emergency department with worsening shortness of breath and a persistent productive cough over the past two weeks. She reported increased fatigue and reduced exercise tolerance. On examination, she was tachypneic with a respiratory rate of 24 breaths per minute, had bilateral wheezing on auscultation, and an oxygen saturation of 88% on room air. A chest X-ray showed increased bronchovascular markings but no focal consolidation. Laboratory tests revealed an elevated white blood cell count and C-reactive protein. She was diagnosed with an acute exacerbation of COPD, likely secondary to a bacterial infection. She was started on nebulized bronchodilators, systemic corticosteroids, and empirical antibiotic therapy with azithromycin. Over the next 48 hours, her symptoms improved, and she was discharged on an optimized COPD maintenance regimen, including long-acting bronchodilators, inhaled corticosteroids, and a short course of oral prednisone. She was advised to follow up with her pulmonologist in two weeks and was given instructions on proper inhaler technique and pulmonary rehabilitation exercises.
+
+Summary:
+2025-05-05T12:16:42.672161+0530 ERROR [SummarizeTool] Ollama error: model requires more system memory (3.5 GiB) than is available (3.1 GiB) (status code: 500) (Retry 2/2)
+2025-05-05T12:16:42.673170+0530 ERROR SummarizeAgent Error: [SummarizeTool] Failed to get response from Ollama after 2 retries.
+2025-05-05T20:12:21.251844+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-05-05T20:12:21.255869+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-05-05T20:12:21.255869+0530 DEBUG   user: Summarize the following medical text concisely:
+
+A 72-year-old female with a history of chronic obstructive pulmonary disease (COPD), hypertension, and osteoporosis presented to the emergency department with worsening shortness of breath and a persistent productive cough over the past two weeks. She reported increased fatigue and reduced exercise tolerance. On examination, she was tachypneic with a respiratory rate of 24 breaths per minute, had bilateral wheezing on auscultation, and an oxygen saturation of 88% on room air. A chest X-ray showed increased bronchovascular markings but no focal consolidation. Laboratory tests revealed an elevated white blood cell count and C-reactive protein. She was diagnosed with an acute exacerbation of COPD, likely secondary to a bacterial infection. She was started on nebulized bronchodilators, systemic corticosteroids, and empirical antibiotic therapy with azithromycin. Over the next 48 hours, her symptoms improved, and she was discharged on an optimized COPD maintenance regimen, including long-acting bronchodilators, inhaled corticosteroids, and a short course of oral prednisone. She was advised to follow up with her pulmonologist in two weeks and was given instructions on proper inhaler technique and pulmonary rehabilitation exercises.
+
+Summary:
+2025-05-05T20:12:21.727882+0530 ERROR [SummarizeTool] Ollama error: model requires more system memory (3.5 GiB) than is available (3.1 GiB) (status code: 500) (Retry 1/2)
+2025-05-05T20:12:21.728420+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-05-05T20:12:21.729531+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-05-05T20:12:21.729531+0530 DEBUG   user: Summarize the following medical text concisely:
+
+A 72-year-old female with a history of chronic obstructive pulmonary disease (COPD), hypertension, and osteoporosis presented to the emergency department with worsening shortness of breath and a persistent productive cough over the past two weeks. She reported increased fatigue and reduced exercise tolerance. On examination, she was tachypneic with a respiratory rate of 24 breaths per minute, had bilateral wheezing on auscultation, and an oxygen saturation of 88% on room air. A chest X-ray showed increased bronchovascular markings but no focal consolidation. Laboratory tests revealed an elevated white blood cell count and C-reactive protein. She was diagnosed with an acute exacerbation of COPD, likely secondary to a bacterial infection. She was started on nebulized bronchodilators, systemic corticosteroids, and empirical antibiotic therapy with azithromycin. Over the next 48 hours, her symptoms improved, and she was discharged on an optimized COPD maintenance regimen, including long-acting bronchodilators, inhaled corticosteroids, and a short course of oral prednisone. She was advised to follow up with her pulmonologist in two weeks and was given instructions on proper inhaler technique and pulmonary rehabilitation exercises.
+
+Summary:
+2025-05-05T20:12:21.866776+0530 ERROR [SummarizeTool] Ollama error: model requires more system memory (3.5 GiB) than is available (3.0 GiB) (status code: 500) (Retry 2/2)
+2025-05-05T20:12:21.870043+0530 ERROR SummarizeAgent Error: [SummarizeTool] Failed to get response from Ollama after 2 retries.
