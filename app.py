@@ -1,6 +1,6 @@
 
 import streamlit as st
-import matplotlib as plt
+import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
 from agents import AgentManager
 from utils.logger import logger
@@ -8,10 +8,8 @@ from dotenv import load_dotenv
 from streamlit_lottie import st_lottie
 from io import BytesIO
 from datetime import datetime
-import numpy as np
 import json
 import os
-import base64
 
 # Load environment variables
 load_dotenv()
@@ -38,26 +36,16 @@ def show_wordcloud(text):
     plt.axis("off")
     st.pyplot(plt)
 
+@st.cache_resource
+def get_agent_manager():
+    return AgentManager(max_retries=2, verbose=True)
 
-def main():
-    st.set_page_config(page_title="Healthcare AI Hub", layout="wide")
-    if st.session_state.view == "home":
-        show_home()
-    else:
-        show_agent_view(st.session_state.view)
-
-# Track current view
-if "view" not in st.session_state:
-    st.session_state.view = "home"
-
-# Navigation functions
 def go_home():
     st.session_state.view = "home"
 
 def go_to_agent(agent_name):
     st.session_state.view = agent_name
 
- # Card styling
 def render_card(title, description, button_label, key, agent_name):
     st.markdown(f"""
     <style>
@@ -77,73 +65,153 @@ def render_card(title, description, button_label, key, agent_name):
         box-shadow: 0 6px 40px rgba(0, 255, 150, 0.4);
     }}
     </style>
-    <div class='card-{key}'>
+    <div class="card-{key}">
         <h4>{title}</h4>
         <p>{description}</p>
     </div>
     """, unsafe_allow_html=True)
 
-    # Button inside container
-    st.button(button_label, key=key, on_click=lambda: go_to_agent(agent_name))
+    if st.button(button_label, key=key):
+        go_to_agent(agent_name)
 
-# Home page with 4 cards
-def show_home():
-    st.title("👨‍⚕️ Multi-Agent AI Healthcare System")
+def main():
+    st.set_page_config(page_title="Multi-Agent AI System", layout="wide")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        render_card("📄 Summarizer", "Summarizes long medical articles.", "Launch Summarizer", "summarizer_btn",
-                        "summarizer")
-    with col2:
-        render_card("📝 Article Refiner", "Refines and enhances content.", "Launch Refiner", "refiner_btn",
-                        "refiner")
+    # your existing CSS…
+    st.markdown("""
+        <style>
+        html, body, [class^="css"]  {
+            background-color: #f5f8ff;
+        }
+        .main-header {
+            font-size: 2.5rem;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            background: linear-gradient(120deg, #1E88E5 0%, #1565C0 100%);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(30,136,229,0.2);
+        }
+        .sub-header {
+            font-size: 1.8rem;
+            color: #0D47A1;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid #1E88E5;
+            margin-bottom: 1rem;
+        }
+        .task-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .result-box, .validation-box, .rating-box {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        .result-box {
+            border-left: 4px solid #43a047;
+        }
+        .validation-box {
+            border-left: 4px solid #fb8c00;
+        }
+        .rating-box {
+            border-left: 4px solid #3949ab;
+        }
+        .stButton>button {
+            background-color: #1E88E5;
+            color: white;
+            border-radius: 25px;
+            padding: 0.5rem 2rem;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .stButton>button:hover {
+            background-color: #1565C0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+        .stTextArea>div>div {
+            border-radius: 10px;
+            border: 2px solid #bbdefb;
+        }
+        .sidebar-content {
+            padding: 1rem;
+            background-color: #e3f2fd;
+            border-radius: 12px;
+        }
+        </style>
+        """, unsafe_allow_html=True)
 
-    col3, col4 = st.columns(2)
-    with col3:
-        render_card("🔒 Data Sanitizer", "Cleans and anonymizes data.", "Launch Sanitizer", "sanitizer_btn",
-                        "sanitizer")
-    with col4:
-        render_card("🤖 Medical Chatbot", "Chat with an AI medical assistant.", "Launch Chatbot", "chatbot_btn",
-                        "chatbot")
+    st.markdown("<div class='main-header'> Multi-Agent AI System For Healthcare with Validation</div>", unsafe_allow_html=True)
 
+    # initialize session view
+    if "view" not in st.session_state:
+        st.session_state.view = "home"
 
-agent_manager = AgentManager(max_retries=2, verbose=True)
+    agent_manager = get_agent_manager()
 
+    # HOME view: show cards
+    if st.session_state.view == "home":
+        st.markdown("<div class='sub-header'>Choose a Task</div>", unsafe_allow_html=True)
+        cols = st.columns(2)
+        with cols[0]:
+            render_card(
+                title="🏥 Summarize Medical Text",
+                description="Quickly condense long articles into bite‑sized summaries.",
+                button_label="Launch Summarizer",
+                key="card_summarizer",
+                agent_name="summarizer"
+            )
+        with cols[1]:
+            render_card(
+                title="📄 Write & Refine Article",
+                description="Draft and polish your research write‑ups.",
+                button_label="Launch Refiner",
+                key="card_refiner",
+                agent_name="refiner"
+            )
+        cols2 = st.columns(2)
+        with cols2[0]:
+            render_card(
+                title="🔒 Sanitize Medical Data (PHI)",
+                description="Automatically anonymize patient data.",
+                button_label="Launch Sanitizer",
+                key="card_sanitizer",
+                agent_name="sanitizer"
+            )
+        with cols2[1]:
+            render_card(
+                title="💬 AI Chatbot Assistant",
+                description="Get real‑time answers from your medical AI.",
+                button_label="Launch Chatbot",
+                key="card_chatbot",
+                agent_name="chatbot"
+            )
 
-# Your agent implementations here
-def summarizer():
-    st.header("📝 Summarizer Agent")
-    summarize_section(agent_manager)
-    st.button("🔙 Back to Home", on_click=go_home)
+    # AGENT view: show the chosen tool + back button
+    else:
+        if st.session_state.view == "summarizer":
+            st.header("🏥 Summarizer")
+            summarize_section(agent_manager)
+        elif st.session_state.view == "refiner":
+            st.header("📄 Article Refiner")
+            write_and_refine_article_section(agent_manager)
+        elif st.session_state.view == "sanitizer":
+            st.header("🔒 Data Sanitizer")
+            sanitize_data_section(agent_manager)
+        elif st.session_state.view == "chatbot":
+            st.header("💬 Medical Chatbot")
+            chatbot_section(agent_manager)
 
+        st.button("🔙 Back to Home", on_click=go_home)
 
-def refiner():
-    st.header("🔧 Refiner Agent")
-    write_and_refine_article_section(agent_manager)
-    st.button("🔙 Back to Home", on_click=go_home)
-
-
-def sanitizer():
-    st.header("🔒 Sanitizer Agent")
-    sanitize_data_section(agent_manager)
-    st.button("🔙 Back to Home", on_click=go_home)
-
-
-def chatbot():
-    st.header("💬 Chatbot Agent")
-    chatbot_section(agent_manager)
-    st.button("🔙 Back to Home", on_click=go_home)
-
-    # Agent views
-def show_agent_view(agent):
-    if agent == "summarizer":
-        summarizer()
-    elif agent == "refiner":
-        refiner()
-    elif agent == "sanitizer":
-        sanitizer()
-    elif agent == "chatbot":
-        chatbot()
 
 def summarize_section(agent_manager):
     st.markdown("<div class='sub-header'>🏥 Summarize Medical Text</div>", unsafe_allow_html=True)
@@ -570,6 +638,7 @@ def store_feedback_json(section, feedback_entry):
     data[section].append(feedback_entry)
     with open(FEEDBACK_FILE, "w") as f:
         json.dump(data, f, indent=2)
+
 
 
 if __name__ == "__main__":

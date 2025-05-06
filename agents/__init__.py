@@ -26,8 +26,6 @@ class AgentManager:
         }
 
     def get_agent(self, agent_name, **kwargs):
-        if agent_name == "chatbot":
-            return ChatbotAgent(max_retries=2, verbose=True)  # Always use Ollama
         agent = self.agents.get(agent_name)
         if not agent:
             raise ValueError(f"Agent '{agent_name}' not found.")

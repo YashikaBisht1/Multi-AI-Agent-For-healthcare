@@ -1,15 +1,9 @@
 ollama~=0.4.7
 streamlit~=1.44.1
-pandas
 loguru~=0.7.3
 python-dotenv~=1.1.0
 wordcloud~=1.9.4
-seaborn
 matplotlib~=3.10.1
-langchain
-langchain-community
-transformers~=4.51.3
 torch~=2.6.0
 numpy~=2.2.4
-sacremoses
 streamlit-lottie
