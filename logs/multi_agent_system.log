@@ -1349,3 +1349,39 @@ A 72-year-old female with a history of chronic obstructive pulmonary disease (CO
 Summary:
 2025-05-05T20:12:21.866776+0530 ERROR [SummarizeTool] Ollama error: model requires more system memory (3.5 GiB) than is available (3.0 GiB) (status code: 500) (Retry 2/2)
 2025-05-05T20:12:21.870043+0530 ERROR SummarizeAgent Error: [SummarizeTool] Failed to get response from Ollama after 2 retries.
+2025-05-06T09:25:34.029392+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-05-06T09:25:34.033393+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-05-06T09:25:34.033393+0530 DEBUG   user: Summarize the following medical text concisely:
+
+A 72-year-old female with a history of chronic obstructive pulmonary disease (COPD), hypertension, and osteoporosis presented to the emergency department with worsening shortness of breath and a persistent productive cough over the past two weeks. She reported increased fatigue and reduced exercise tolerance. On examination, she was tachypneic with a respiratory rate of 24 breaths per minute, had bilateral wheezing on auscultation, and an oxygen saturation of 88% on room air. A chest X-ray showed increased bronchovascular markings but no focal consolidation. Laboratory tests revealed an elevated white blood cell count and C-reactive protein. She was diagnosed with an acute exacerbation of COPD, likely secondary to a bacterial infection. She was started on nebulized bronchodilators, systemic corticosteroids, and empirical antibiotic therapy with azithromycin. Over the next 48 hours, her symptoms improved, and she was discharged on an optimized COPD maintenance regimen, including long-acting bronchodilators, inhaled corticosteroids, and a short course of oral prednisone. She was advised to follow up with her pulmonologist in two weeks and was given instructions on proper inhaler technique and pulmonary rehabilitation exercises.
+
+Summary:
+2025-05-06T09:25:34.513318+0530 ERROR [SummarizeTool] Ollama error: model requires more system memory (2.8 GiB) than is available (2.2 GiB) (status code: 500) (Retry 1/2)
+2025-05-06T09:25:34.513941+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-05-06T09:25:34.514659+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-05-06T09:25:34.515168+0530 DEBUG   user: Summarize the following medical text concisely:
+
+A 72-year-old female with a history of chronic obstructive pulmonary disease (COPD), hypertension, and osteoporosis presented to the emergency department with worsening shortness of breath and a persistent productive cough over the past two weeks. She reported increased fatigue and reduced exercise tolerance. On examination, she was tachypneic with a respiratory rate of 24 breaths per minute, had bilateral wheezing on auscultation, and an oxygen saturation of 88% on room air. A chest X-ray showed increased bronchovascular markings but no focal consolidation. Laboratory tests revealed an elevated white blood cell count and C-reactive protein. She was diagnosed with an acute exacerbation of COPD, likely secondary to a bacterial infection. She was started on nebulized bronchodilators, systemic corticosteroids, and empirical antibiotic therapy with azithromycin. Over the next 48 hours, her symptoms improved, and she was discharged on an optimized COPD maintenance regimen, including long-acting bronchodilators, inhaled corticosteroids, and a short course of oral prednisone. She was advised to follow up with her pulmonologist in two weeks and was given instructions on proper inhaler technique and pulmonary rehabilitation exercises.
+
+Summary:
+2025-05-06T09:25:34.656000+0530 ERROR [SummarizeTool] Ollama error: model requires more system memory (2.8 GiB) than is available (2.2 GiB) (status code: 500) (Retry 2/2)
+2025-05-06T09:25:34.657512+0530 ERROR SummarizeAgent Error: [SummarizeTool] Failed to get response from Ollama after 2 retries.
+2025-05-06T09:26:11.634762+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-05-06T09:26:11.638433+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-05-06T09:26:11.638433+0530 DEBUG   user: Summarize the following medical text concisely:
+
+A 72-year-old female with a history of chronic obstructive pulmonary disease (COPD), hypertension, and osteoporosis presented to the emergency department with worsening shortness of breath and a persistent productive cough over the past two weeks. She reported increased fatigue and reduced exercise tolerance. On examination, she was tachypneic with a respiratory rate of 24 breaths per minute, had bilateral wheezing on auscultation, and an oxygen saturation of 88% on room air. A chest X-ray showed increased bronchovascular markings but no focal consolidation. Laboratory tests revealed an elevated white blood cell count and C-reactive protein. She was diagnosed with an acute exacerbation of COPD, likely secondary to a bacterial infection. She was started on nebulized bronchodilators, systemic corticosteroids, and empirical antibiotic therapy with azithromycin. Over the next 48 hours, her symptoms improved, and she was discharged on an optimized COPD maintenance regimen, including long-acting bronchodilators, inhaled corticosteroids, and a short course of oral prednisone. She was advised to follow up with her pulmonologist in two weeks and was given instructions on proper inhaler technique and pulmonary rehabilitation exercises.
+
+
+Summary:
+2025-05-06T09:26:11.810558+0530 ERROR [SummarizeTool] Ollama error: model requires more system memory (3.5 GiB) than is available (2.5 GiB) (status code: 500) (Retry 1/2)
+2025-05-06T09:26:11.811564+0530 INFO [SummarizeTool] Sending messages to Ollama (llama3.2:3b):
+2025-05-06T09:26:11.812563+0530 DEBUG   system: You are an AI assistant that summarizes medical texts concisely and accurately.
+2025-05-06T09:26:11.812563+0530 DEBUG   user: Summarize the following medical text concisely:
+
+A 72-year-old female with a history of chronic obstructive pulmonary disease (COPD), hypertension, and osteoporosis presented to the emergency department with worsening shortness of breath and a persistent productive cough over the past two weeks. She reported increased fatigue and reduced exercise tolerance. On examination, she was tachypneic with a respiratory rate of 24 breaths per minute, had bilateral wheezing on auscultation, and an oxygen saturation of 88% on room air. A chest X-ray showed increased bronchovascular markings but no focal consolidation. Laboratory tests revealed an elevated white blood cell count and C-reactive protein. She was diagnosed with an acute exacerbation of COPD, likely secondary to a bacterial infection. She was started on nebulized bronchodilators, systemic corticosteroids, and empirical antibiotic therapy with azithromycin. Over the next 48 hours, her symptoms improved, and she was discharged on an optimized COPD maintenance regimen, including long-acting bronchodilators, inhaled corticosteroids, and a short course of oral prednisone. She was advised to follow up with her pulmonologist in two weeks and was given instructions on proper inhaler technique and pulmonary rehabilitation exercises.
+
+
+Summary:
+2025-05-06T09:26:11.951235+0530 ERROR [SummarizeTool] Ollama error: model requires more system memory (3.5 GiB) than is available (2.5 GiB) (status code: 500) (Retry 2/2)
+2025-05-06T09:26:11.952294+0530 ERROR SummarizeAgent Error: [SummarizeTool] Failed to get response from Ollama after 2 retries.
