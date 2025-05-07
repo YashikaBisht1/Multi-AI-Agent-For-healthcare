@@ -30,8 +30,7 @@ The **Multi-Agent AI App with Ollama** is a Python-based application leveraging 
 
 ## Architecture
 
-![Flowchart](https://github.com/user-attachments/assets/33082bf4-b130-4dc1-9ad5-0c1afee63c71)
-
+<img src="https://github.com/user-attachments/assets/33082bf4-b130-4dc1-9ad5-0c1afee63c71" alt="Flowchart" width="400" height="400">
 
 
 ### Components Breakdown
@@ -197,10 +196,11 @@ Contributions are welcome! Please follow these steps:
 ## Acknowledgements
 
 - [Ollama](https://ollama.com/) for providing the platform to run LLaMA models locally.
-- [LLaMA](https://ai.facebook.com/products/llama/) by Meta for the powerful open-source language model.
 - [Streamlit](https://streamlit.io/) for the web application framework.
 - [Loguru](https://github.com/Delgan/loguru) for the logging library.
-- Inspired by collaborative multi-agent system architectures and prompt engineering techniques like Chain-of-Thought (CoT) and ReAct.
+- [Streamlit_lottie](https://lottiefiles.com/free-animations/streamlit) for chatbot animation.
+- [Wordcloud](https://amueller.github.io/word_cloud/) for keyword extraction.
+  
 
 ## Feedback Collection & Validation
 
